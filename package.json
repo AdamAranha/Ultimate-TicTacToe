@@ -1,0 +1,25 @@
+{
+  "name": "Ultimate-TicTacToe",
+  "version": "1.0.0",
+  "description": "A Game of Ultimate Tic Tac Toe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently -n 'server,client' -c 'green,blue' \"cd app && npm run dev\" \"cd client && npm start\"",
+    "dev": "cd app && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AdamAranha/Ultimate-TicTacToe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AdamAranha/Ultimate-TicTacToe/issues"
+  },
+  "homepage": "https://github.com/AdamAranha/Ultimate-TicTacToe#readme",
+  "dependencies": {
+    "concurrently": "^6.2.0"
+  }
+}
