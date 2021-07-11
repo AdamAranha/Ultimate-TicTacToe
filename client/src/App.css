@@ -2,3 +2,14 @@ body {
   background-color: #282c34;
 color: white;
 }
+
+.body-wrapper{
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+.board-wrapper{
+  height: 50vw;
+  width: 50vw;
+}

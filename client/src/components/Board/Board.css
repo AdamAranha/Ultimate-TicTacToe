@@ -1,0 +1,31 @@
+.board-container{
+
+height: 100%;
+width: 100%;
+
+display: grid;
+grid-template-columns: repeat(3,1fr);
+
+padding: 25px;
+}
+
+.board-box{
+background-color: white;
+}
+
+.board-box:hover{
+background-color: rgb(25, 182, 25);
+}
+
+.board-box-0,.board-box-1,.board-box-3,.board-box-4{
+    border-bottom:1px solid black;
+    border-right:1px solid black;
+}
+
+.board-box-2,.board-box-5{
+    border-bottom:1px solid black;
+}
+
+.board-box-6,.board-box-7{
+    border-right:1px solid black;
+}
