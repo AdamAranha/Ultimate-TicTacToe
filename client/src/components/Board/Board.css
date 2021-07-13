@@ -13,8 +13,12 @@ padding: 25px;
 background-color: white;
 }
 
-.board-box:hover{
-background-color: rgb(25, 182, 25);
+.parent:hover{
+background-color: rgb(98, 206, 98);
+}
+
+.child:hover{
+    background-color: rgb(24, 228, 24);
 }
 
 .board-box-0,.board-box-1,.board-box-3,.board-box-4{

@@ -17,6 +17,7 @@ function App() {
 
     socket = io(ENDPOINT)
     // console.log(socket)
+    console.log(`The viewport dimensions are ${window.innerWidth}x${window.innerHeight}`)
   }, [])
 
 
@@ -25,7 +26,7 @@ function App() {
       <Header />
       <div className='body-wrapper'>
         <div className='board-wrapper'>
-          <Board boxContent={<Board />} />
+          <Board boxContent={<Board />} parent={true} />
         </div>
       </div>
     </div>
