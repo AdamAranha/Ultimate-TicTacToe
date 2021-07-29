@@ -1,42 +1,224 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './Board.css';
+import React from 'react';
+import './Board.css'
 
-export default function Board({ boxContent, parent }) {
+function Board() {
 
-    const [childId, setChildId] = useState('')
-    const [position, setPosition] = useState([
+    let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
+    // placementArray keeps track of x's and o's on the board
+    let placementArray = [];
+    for (let count = 0; count < 9; count++) {
+        placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
 
-    ])
+    let boardArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+    let isPlayer = true
 
-    let thisRef = useRef();
-    const boardArray = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-    const parentArray = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
-    let input = <div className='board-input'>Hi</div>;
-    let output = "<div className='board-output'>Bye</div>";
+    function registerClick(event) {
+        // console.log(event.target.parentNode.parentNode.id)
+        // console.log(event.target.id)
+
+        placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
+        // placementArray[wordToNumber(event.target.id)] = isPlayer ? 2 : 1
+        console.table(placementArray)
+
+        setBoard(event)
+        isPlayer = !isPlayer
+    }
+
+    function setBoard(event) {
+        let counter = 1
+        // console.log(event.target.id)
+
+        // console.log(document.querySelector(`#${event.target.parentNode.parentNode.id}`).childNodes[0].childNodes[0])
 
 
-    useEffect(() => {
-        if (!parent) {
-            setChildId(thisRef.current.parentNode.parentNode.id)
-        }
+        placementArray.forEach((array, arrayIndex) => {
+            array.forEach((square, squareIndex) => {
+                console.log(`${boardArray[arrayIndex]},${squareIndex}`)
+                // console.log(event.target.parentNode.parentNode)
+                document.querySelector(`#${boardArray[arrayIndex]}`).childNodes[0].childNodes[squareIndex].innerHTML =
+                    square === 0 ? '' : square === 1 ? '<span class="markerO">O</span>' : '<span class="markerX">X</span>'
+            })
+        })
 
-    }, [])
 
-    function target(event) {
-        console.log(event.target.id)
-        event.target.innerHTML = output
+        // placementArray.forEach((item, index) => {
+        //     document.querySelector(`#${numberToWord(index)}`).innerHTML =
+        //         item === 0 ? '' : item === 1 ? '<span class="markerO">O</span>' : '<span class="markerX">X</span>'
+        // })
+        // console.log(checkForWin())
+    }
+
+    function getCurrentID(event) {
+        // console.log(document.querySelector('.Anine').parentNode.parentNode.id)
+        // console.log(event.target.childNodes[0])
+        console.log(event.target.parentNode.parentNode)
+    }
+
+
+
+    function checkForWin() {
+        let currentPlayer = isPlayer ? 2 : 1
+        // Horizontal Win Conditions
+        if ((placementArray[0] === currentPlayer &&
+            placementArray[1] === currentPlayer &&
+            placementArray[2] === currentPlayer) ||
+
+            (placementArray[3] === currentPlayer &&
+                placementArray[4] === currentPlayer &&
+                placementArray[5] === currentPlayer) ||
+
+            (placementArray[6] === currentPlayer &&
+                placementArray[7] === currentPlayer &&
+                placementArray[8] === currentPlayer) ||
+            // Vertical Win Conditions
+            (placementArray[0] === currentPlayer &&
+                placementArray[3] === currentPlayer &&
+                placementArray[6] === currentPlayer) ||
+
+            (placementArray[1] === currentPlayer &&
+                placementArray[4] === currentPlayer &&
+                placementArray[7] === currentPlayer) ||
+
+            (placementArray[2] === currentPlayer &&
+                placementArray[5] === currentPlayer &&
+                placementArray[8] === currentPlayer) ||
+            // Diagonal Win Conditions
+            (placementArray[0] === currentPlayer &&
+                placementArray[4] === currentPlayer &&
+                placementArray[8] === currentPlayer) ||
+
+            (placementArray[2] === currentPlayer &&
+                placementArray[4] === currentPlayer &&
+                placementArray[6] === currentPlayer)) {
+
+            return true;
+        };
+        return false;
     }
 
     return (
-        <div className='board-container'>
-            {boardArray.map(item => (
-                <div className={parent ? `board-box board-box-${item} parent` : `board-box board-box-${item} child`} id={parent ? `${parentArray[item]}` : `${childId}${item}`} key={`box${item}`}
-                    onClick={parent ? null : (event) => target(event)} ref={parent ? null : thisRef} >
-                    {parent ? boxContent : position}
+        <div className="bigBoard">
+            <div id="A" className="one child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
                 </div>
-            ))}
-        </div>
+            </div>
+            <div id="B" className="two child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="Anine nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
+            <div id="C" className="three child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
+            <div id="D" className="four child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
+            <div id="E" className="five child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
+            <div id="F" className="six child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
+            <div id="G" className="seven child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
+            <div id="H" className="eight child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
+            <div id="I" className="nine child">
+                <div className="smallBoard-container">
+                    <div id={`zero`} className=" one childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="one" className="two childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="two" className="three childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="three" className="four childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="four" className="five childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="five" className="six childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="six" className="seven childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="seven" className="eight childchild" onClick={(event) => registerClick(event)}></div>
+                    <div id="eight" className="nine childchild" onClick={(event) => registerClick(event)}></div>
+                </div>
+            </div>
 
+        </div>
     )
 }
 
+export default Board

@@ -25,9 +25,9 @@ function App() {
     <div>
       <Header />
       <div className='body-wrapper'>
-        <div className='board-wrapper'>
-          <Board boxContent={<Board />} parent={true} />
-        </div>
+
+        <Board />
+
       </div>
     </div>
   );

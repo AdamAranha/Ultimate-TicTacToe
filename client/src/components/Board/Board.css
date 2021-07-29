@@ -1,38 +1,50 @@
-.board-container{
-
-height: 100%;
-width: 100%;
-
-display: grid;
-grid-template-columns: repeat(3,1fr);
-
-padding: 25px;
+.bigBoard{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
 }
 
-.board-box{
-background-color: white;
-display: flex;
-justify-content: center;
-align-items: center;
-}
-
-.parent:hover{
-background-color: rgb(98, 206, 98);
+.child{
+    height: 21vh;
+    width: 21vh;
+    /* background-color: red; */
 }
 
 .child:hover{
-    background-color: rgb(24, 228, 24);
+    /* background-color: blue; */
 }
 
-.board-box-0,.board-box-1,.board-box-3,.board-box-4{
-    border-bottom:1px solid black;
-    border-right:1px solid black;
+.one,.two,.three,.four,.five,.six{
+    border-bottom: 1px solid black;
 }
 
-.board-box-2,.board-box-5{
-    border-bottom:1px solid black;
+.one,.two,.four,.five,.seven,.eight{
+    border-right: 1px solid black;
 }
 
-.board-box-6,.board-box-7{
-    border-right:1px solid black;
+.smallBoard-container{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    padding: 2vh;
 }
+
+.childchild{
+    height: calc(17vh/3);
+    /* background-color: purple; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh;
+}
+
+.childchild:hover{
+    background-color: greenyellow;
+}
+
+.markerX{
+    font-size: 4vh;
+}
+
+.markerO{
+    font-size: 4vh;
+}
+
