@@ -40,11 +40,9 @@
     background-color: greenyellow;
 }
 
-.markerX{
+.marker{
     font-size: 4vh;
+    pointer-events: none
 }
 
-.markerO{
-    font-size: 4vh;
-}
 

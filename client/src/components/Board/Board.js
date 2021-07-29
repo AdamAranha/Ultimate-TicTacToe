@@ -14,48 +14,28 @@ function Board() {
     let isPlayer = true
 
     function registerClick(event) {
-        // console.log(event.target.parentNode.parentNode.id)
-        // console.log(event.target.id)
 
-        placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
-        // placementArray[wordToNumber(event.target.id)] = isPlayer ? 2 : 1
-        console.table(placementArray)
+        if (placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] === 0) {
+            placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
+            // console.table(placementArray)
+            setBoard()
+            isPlayer = !isPlayer
+        } else {
+            console.log("Space occupied")
+        }
 
-        setBoard(event)
-        isPlayer = !isPlayer
     }
 
-    function setBoard(event) {
-        let counter = 1
-        // console.log(event.target.id)
-
-        // console.log(document.querySelector(`#${event.target.parentNode.parentNode.id}`).childNodes[0].childNodes[0])
-
+    function setBoard() {
 
         placementArray.forEach((array, arrayIndex) => {
             array.forEach((square, squareIndex) => {
-                console.log(`${boardArray[arrayIndex]},${squareIndex}`)
-                // console.log(event.target.parentNode.parentNode)
+                // console.log(`${boardArray[arrayIndex]},${squareIndex}`)
                 document.querySelector(`#${boardArray[arrayIndex]}`).childNodes[0].childNodes[squareIndex].innerHTML =
-                    square === 0 ? '' : square === 1 ? '<span class="markerO">O</span>' : '<span class="markerX">X</span>'
+                    square === 0 ? '' : square === 1 ? '<span class="marker">O</span>' : '<span class="marker">X</span>'
             })
         })
-
-
-        // placementArray.forEach((item, index) => {
-        //     document.querySelector(`#${numberToWord(index)}`).innerHTML =
-        //         item === 0 ? '' : item === 1 ? '<span class="markerO">O</span>' : '<span class="markerX">X</span>'
-        // })
-        // console.log(checkForWin())
     }
-
-    function getCurrentID(event) {
-        // console.log(document.querySelector('.Anine').parentNode.parentNode.id)
-        // console.log(event.target.childNodes[0])
-        console.log(event.target.parentNode.parentNode)
-    }
-
-
 
     function checkForWin() {
         let currentPlayer = isPlayer ? 2 : 1
