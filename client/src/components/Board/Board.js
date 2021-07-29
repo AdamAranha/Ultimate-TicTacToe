@@ -3,7 +3,6 @@ import './Board.css'
 
 function Board() {
 
-    let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
     // placementArray keeps track of x's and o's on the board
     let placementArray = [];
     for (let count = 0; count < 9; count++) {
@@ -12,8 +11,11 @@ function Board() {
 
     let boardArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
     let isPlayer = true
+    let excludeArray = [];
+
 
     function registerClick(event) {
+        let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
 
         if (placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] === 0) {
             placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
@@ -35,47 +37,70 @@ function Board() {
                     square === 0 ? '' : square === 1 ? '<span class="marker">O</span>' : '<span class="marker">X</span>'
             })
         })
+        checkForWin();
     }
 
     function checkForWin() {
         let currentPlayer = isPlayer ? 2 : 1
+        let isWin;
+
+        placementArray.forEach((array, index) => {
+            //Ignores array that has already been won
+            if (excludeArray.includes(index)) {
+                return;
+            }
+            //Horizontal Win Conditions
+            if ((array[0] === currentPlayer &&
+                array[1] === currentPlayer &&
+                array[2] === currentPlayer)
+                ||
+                (array[3] === currentPlayer &&
+                    array[4] === currentPlayer &&
+                    array[5] === currentPlayer)
+                ||
+                (array[6] === currentPlayer &&
+                    array[7] === currentPlayer &&
+                    array[8] === currentPlayer)
+                ||
+                //Vertical Win Conditions
+                (array[0] === currentPlayer &&
+                    array[3] === currentPlayer &&
+                    array[6] === currentPlayer)
+                ||
+                (array[1] === currentPlayer &&
+                    array[4] === currentPlayer &&
+                    array[7] === currentPlayer)
+                ||
+                (array[2] === currentPlayer &&
+                    array[5] === currentPlayer &&
+                    array[8] === currentPlayer)
+                ||
+                //Vertical Win Conditions
+                (array[0] === currentPlayer &&
+                    array[4] === currentPlayer &&
+                    array[8] === currentPlayer)
+                ||
+                (array[2] === currentPlayer &&
+                    array[4] === currentPlayer &&
+                    array[6] === currentPlayer)) {
+
+                isWin = console.log('DING DING DING')
+                // console.log(index)
+                excludeArray.push(index)
+                console.log(excludeArray)
+
+
+            } else {
+            }
+        })
+        return isWin
         // Horizontal Win Conditions
-        if ((placementArray[0] === currentPlayer &&
-            placementArray[1] === currentPlayer &&
-            placementArray[2] === currentPlayer) ||
 
-            (placementArray[3] === currentPlayer &&
-                placementArray[4] === currentPlayer &&
-                placementArray[5] === currentPlayer) ||
 
-            (placementArray[6] === currentPlayer &&
-                placementArray[7] === currentPlayer &&
-                placementArray[8] === currentPlayer) ||
-            // Vertical Win Conditions
-            (placementArray[0] === currentPlayer &&
-                placementArray[3] === currentPlayer &&
-                placementArray[6] === currentPlayer) ||
 
-            (placementArray[1] === currentPlayer &&
-                placementArray[4] === currentPlayer &&
-                placementArray[7] === currentPlayer) ||
-
-            (placementArray[2] === currentPlayer &&
-                placementArray[5] === currentPlayer &&
-                placementArray[8] === currentPlayer) ||
-            // Diagonal Win Conditions
-            (placementArray[0] === currentPlayer &&
-                placementArray[4] === currentPlayer &&
-                placementArray[8] === currentPlayer) ||
-
-            (placementArray[2] === currentPlayer &&
-                placementArray[4] === currentPlayer &&
-                placementArray[6] === currentPlayer)) {
-
-            return true;
-        };
-        return false;
     }
+
+
 
     return (
         <div className="bigBoard">
