@@ -34,15 +34,20 @@
     justify-content: center;
     align-items: center;
     padding: 1vh;
+    transition: all 0.2s ease-in-out;
 }
 
 .childchild:hover{
-    background-color: greenyellow;
+    background-color: #77ff8e;
 }
 
 .marker{
     font-size: 4vh;
     pointer-events: none
 }
+
+.blur {
+    filter: blur(6px);
+  }
 
 
