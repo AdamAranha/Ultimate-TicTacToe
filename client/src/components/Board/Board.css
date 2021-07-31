@@ -6,11 +6,7 @@
 .child{
     height: 21vh;
     width: 21vh;
-    /* background-color: red; */
-}
-
-.child:hover{
-    /* background-color: blue; */
+    position: relative;
 }
 
 .one,.two,.three,.four,.five,.six{
@@ -25,10 +21,12 @@
     display: grid;
     grid-template-columns: repeat(3,1fr);
     padding: 2vh;
+    position: absolute;
 }
 
 .childchild{
     height: calc(17vh/3);
+    width: calc(17vh/3);
     /* background-color: purple; */
     display: flex;
     justify-content: center;
@@ -47,7 +45,32 @@
 }
 
 .blur {
-    filter: blur(6px);
+    filter: blur(4px);
   }
+
+.win{
+    position: absolute;
+    height: 20vh;
+    width: 20vh;
+    font-size: 20vh;
+    color: red;
+    line-height: 70%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    animation: fadeIn 1.5s;
+    padding: 2vh;
+}
+
+    @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+      
+        to{
+          opacity: 1;
+        }
+      }
 
 
