@@ -35,8 +35,20 @@
     transition: all 0.2s ease-in-out;
 }
 
-.childchild:hover{
+/* .childchild:hover{
     background-color: #77ff8e;
+} */
+
+.vacant:hover{
+    background-color: #77ff8e;
+}
+
+.occupied:hover{
+    background-color: #ff3a3a;;
+}
+
+.endgame:hover{
+    background-color: none;
 }
 
 .marker{
@@ -53,13 +65,13 @@
     height: 20vh;
     width: 20vh;
     font-size: 20vh;
-    color: red;
+    color: #ff3a3a;
     line-height: 70%;
     display: none;
     justify-content: center;
     align-items: center;
     pointer-events: none;
-    animation: fadeIn 1.5s;
+    animation: fadeIn 1s;
     padding: 2vh;
 }
 
