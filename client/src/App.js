@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './components/Header.js';
+import Header from './components/Header/Header.js';
 import Board from './components/Board/Board.js'
 
 import io from 'socket.io-client';
