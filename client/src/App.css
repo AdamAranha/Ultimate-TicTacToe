@@ -8,7 +8,7 @@ color: white;
 }
 
 .body-wrapper{
-  width: 100vw;
+  display: block;
   display: flex;
   justify-content: center;
 }
