@@ -72,9 +72,7 @@ export default function Board() {
         isPlayer = true
         let strikeThroughArr = ['h-top', 'h-mid', 'h-bot', 'v-left', 'v-mid', 'v-right', 'd-rtl', 'd-ltr']
         strikeThroughArr.forEach(item => {
-            if (document.getElementById(item)) {
-                document.getElementById(item).classList.remove('horizontal', 'vertical', 'diagonal-rtl', 'diagonal-ltr')
-            }
+            if (document.getElementById(item)) { document.getElementById(item).classList.remove('horizontal', 'vertical', 'diagonal-rtl', 'diagonal-ltr') }
         })
     }
 
@@ -138,10 +136,10 @@ export default function Board() {
             winCondition = 'v-left'; return { state: true, winCondition }
         }
         if (shortCut(1, 4, 7)) {
-            winCondition = 'h-mid'; return { state: true, winCondition }
+            winCondition = 'v-mid'; return { state: true, winCondition }
         }
         if (shortCut(2, 5, 8)) {
-            winCondition = 'h-right'; return { state: true, winCondition }
+            winCondition = 'v-right'; return { state: true, winCondition }
         }
         if (shortCut(0, 4, 8)) {
             winCondition = 'd-rtl'; return { state: true, winCondition }
@@ -167,19 +165,15 @@ export default function Board() {
         document.querySelector(`#${boardArray[index]}`).childNodes[currentPlayer === 2 ? 1 : 2].style.display = 'flex'
     }
 
-    function buttonStrike() {
-        document.getElementById('d-ltr').className = 'diagonal-ltr'
-    }
-
+    //Animates a line moving throught the winning row/column/etc
     function strikeThrough(array) {
         switch (array) {
             case "A": return <div><div id="h-top"></div><div id="v-left"></div><div id="d-rtl"></div></div>;
-            case 'B': return <div id="h-mid"></div>
+            case 'B': return <div id="v-mid"></div>
             case 'C': return <div><div id="v-right"></div><div id="d-ltr"></div></div>
             case 'D': return <div id="h-mid"></div>
             case 'G': return <div><div id="h-bot"></div></div>
-
-            default: return
+            default: break;
         }
     }
 

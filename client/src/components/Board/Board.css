@@ -137,7 +137,7 @@
 .horizontal{
     z-index: 1;
     top: 10.4vh;
-    left: 5vh;
+    left: 2vh;
     background-color: rgb(216, 16, 16);
     position: absolute;
     height: 1.5vh;
@@ -148,13 +148,13 @@
 
 @keyframes growHorizontal{
     to {
-        width: 53vh;
+        width: 59vh;
     }
 }
 .vertical{
     z-index: 1;
     left: 9.75vh;
-    top: 5.5vh;
+    top: 2.25vh;
     background-color: rgb(216, 16, 16);
     position: absolute;
     height: 1.5vh;
@@ -166,7 +166,7 @@
 
 @keyframes growVertical{
     to {
-        height: 53vh;
+        height: 60vh;
     }
 }
 
