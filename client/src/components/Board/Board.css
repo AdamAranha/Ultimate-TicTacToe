@@ -1,6 +1,7 @@
 .bigBoard{
     display: grid;
     grid-template-columns: repeat(3,1fr);
+    justify-content: center;
 }
 
 .child{
@@ -9,12 +10,36 @@
     position: relative;
 }
 
-.one,.two,.three,.four,.five,.six{
+.zero,.one,.two,.three,.four,.five{
     border-bottom: 1px solid black;
 }
 
-.one,.two,.four,.five,.seven,.eight{
+.zeroThick,.oneThick,.twoThick,.threeThick,.fourThick,.fiveThick{
+    border-bottom: 3px solid black;
+}
+
+.zero,.one,.three,.four,.six,.seven{
     border-right: 1px solid black;
+}
+
+.zeroThick,.oneThick,.threeThick,.fourThick,.sixThick,.sevenThick{
+    border-right: 3px solid black;
+}
+
+.zero{
+    border-radius: 10px 0px 0px 0px;
+}
+
+.two{
+    border-radius: 0px 10px 0px 0px;
+}
+
+.six{
+    border-radius: 0px 0px 0px 10px;
+}
+
+.eight{
+    border-radius: 0px 0px 10px 0px;
 }
 
 .smallBoard-container{
@@ -44,7 +69,7 @@
 }
 
 .occupied:hover{
-    background-color: #ff3a3a;;
+    background-color: #fd5a5a;;
 }
 
 .endgame:hover{
@@ -62,8 +87,8 @@
 
 .win{
     position: absolute;
-    height: 20vh;
-    width: 20vh;
+    height: 21vh;
+    width: 21vh;
     font-size: 20vh;
     color: #ff3a3a;
     line-height: 70%;
@@ -72,7 +97,7 @@
     align-items: center;
     pointer-events: none;
     animation: fadeIn 1s;
-    padding: 2vh;
+    /* padding: 2vh; */
 }
 
     @keyframes fadeIn {

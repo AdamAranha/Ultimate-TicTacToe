@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './Board.css'
 
-function Board() {
+export default function Board() {
 
     useEffect(() => {
         let classname = document.getElementsByClassName('childchild');
@@ -17,12 +17,14 @@ function Board() {
     }
     let overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     let boardArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+    let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
+
     let isPlayer = true
     let excludeArray = [];
 
 
     function registerClick(event) {
-        let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
+        console.log(temp())
         if (placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] === 0) {
             placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
             setBoard()
@@ -34,6 +36,9 @@ function Board() {
             console.log("Space occupied")
         }
 
+        function temp() {
+            return ('It works')
+        }
     }
 
     function setBoard() {
@@ -46,6 +51,36 @@ function Board() {
         checkSectionWin();
     }
 
+    function resetBoard() {
+        //Removes hover effects and function from all squares because im paranoid and think I'll have duplicates if I don't
+        document.getElementById(boardArray[0]).childNodes[0].childNodes.forEach(item => {
+            item.classList.remove('vacant', 'occupied')
+            item.removeEventListener('click', registerClick, true)
+        })
+        //Adds the hover effects and functions back to all squares
+        let classname = document.getElementsByClassName('childchild');
+        Object.keys(classname).forEach(element => {
+            classname[element].addEventListener('click', registerClick, true);
+            classname[element].className += ' vacant';
+        });
+
+        boardArray.forEach((item, index) => {
+            //Removes blur from sections
+            document.querySelector(`#${item}`).childNodes[0].className = 'smallBoard-container'
+            //Removes the red X or O over the sections
+            document.querySelector(`#${boardArray[index]}`).childNodes[1].style.display = 'none'
+            document.querySelector(`#${boardArray[index]}`).childNodes[2].style.display = 'none'
+        })
+        //Resetting the arrays to start
+        for (let count = 0; count < 9; count++) {
+            placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        }
+        setBoard()
+        excludeArray = [];
+        overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        isPlayer = true
+    }
+
     function checkSectionWin() {
         placementArray.forEach((array, index) => {
             //Ignores array that has already been won
@@ -55,7 +90,7 @@ function Board() {
             if (checkForWin(array)) {
                 console.log('DING DING DING')
                 changeDisplay(index)
-                removeHandlers(index)
+                removeEffects(index)
                 excludeArray.push(index)
                 overBoard[index] = isPlayer ? 2 : 1
                 checkOverboardWin()
@@ -67,253 +102,66 @@ function Board() {
     function checkOverboardWin() {
         if (checkForWin(overBoard)) {
             console.log("WE HAVE A WINNER!!")
-            boardArray.forEach((array, index) => removeHandlers(index))
-
-            let classname = document.getElementsByClassName('childchild');
-            Object.keys(classname).forEach(element => {
-                classname[element].classList.remove('vacant')
-                classname[element].classList.remove('occupied')
-
-            });
+            boardArray.forEach((array, index) => removeEffects(index))
         }
-
     }
 
     function checkForWin(array) {
         let currentPlayer = isPlayer ? 2 : 1
-
+        // Purely so I don't aave to write out all the win conditions...again
+        function shortCut(num1, num2, num3) {
+            return (array[num1] === currentPlayer &&
+                array[num2] === currentPlayer &&
+                array[num3] === currentPlayer)
+        }
         //Horizontal Win Conditions
-        if ((array[0] === currentPlayer &&
-            array[1] === currentPlayer &&
-            array[2] === currentPlayer)
-            ||
-            (array[3] === currentPlayer &&
-                array[4] === currentPlayer &&
-                array[5] === currentPlayer)
-            ||
-            (array[6] === currentPlayer &&
-                array[7] === currentPlayer &&
-                array[8] === currentPlayer)
+        if ((shortCut(0, 1, 2)) || (shortCut(3, 4, 5)) || (shortCut(6, 7, 8))
             ||
             //Vertical Win Conditions
-            (array[0] === currentPlayer &&
-                array[3] === currentPlayer &&
-                array[6] === currentPlayer)
-            ||
-            (array[1] === currentPlayer &&
-                array[4] === currentPlayer &&
-                array[7] === currentPlayer)
-            ||
-            (array[2] === currentPlayer &&
-                array[5] === currentPlayer &&
-                array[8] === currentPlayer)
+            (shortCut(0, 3, 6)) || (shortCut(1, 4, 7)) || (shortCut(2, 5, 8))
             ||
             //Vertical Win Conditions
-            (array[0] === currentPlayer &&
-                array[4] === currentPlayer &&
-                array[8] === currentPlayer)
-            ||
-            (array[2] === currentPlayer &&
-                array[4] === currentPlayer &&
-                array[6] === currentPlayer)) {
+            (shortCut(0, 4, 8)) || (shortCut(2, 4, 6))) {
             return true
         } else {
             return false
         }
-
     }
 
-    function removeHandlers(section) {
+    function removeEffects(section) {
         document.getElementById(boardArray[section]).childNodes[0].childNodes.forEach(item => {
-
+            item.classList.remove('vacant', 'occupied')
             item.removeEventListener('click', registerClick, true)
         })
     }
-    //Blurs sector on win and shows winning symbol
+    //Blurs section on win and shows winning symbol
     function changeDisplay(index) {
         let currentPlayer = isPlayer ? 2 : 1
-
+        //Blurs section after it is claimed
         document.querySelector(`#${boardArray[index]}`).childNodes[0].className += ' blur'
-        // document.querySelector('.win-X').style.display = 'flex'
+        //Displays X or O depending on who wins the section
         document.querySelector(`#${boardArray[index]}`).childNodes[currentPlayer === 2 ? 1 : 2].style.display = 'flex'
     }
 
     return (
         <div className="bigBoard">
-            <div id="A" className="one child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
+            {boardArray.map((array, index) => (
+                <div id={array} className={`${numberArray[index]}Thick child`} key={`${numberArray[index]}Thick child`}>
+                    <div className="smallBoard-container">
+                        {numberArray.map((square) => (
+                            <div id={square} className={`${square} childchild`} key={square}></div>
+                        ))}
+                    </div>
+                    <div className="win">
+                        <p>X</p>
+                    </div>
+                    <div className="win">
+                        <p>O</p>
+                    </div>
                 </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="B" className="two child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="C" className="three child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="D" className="four child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="E" className="five child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="F" className="six child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="G" className="seven child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="H" className="eight child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-            <div id="I" className="nine child">
-                <div className="smallBoard-container">
-                    <div id={`zero`} className="one childchild"></div>
-                    <div id="one" className="two childchild"></div>
-                    <div id="two" className="three childchild"></div>
-                    <div id="three" className="four childchild"></div>
-                    <div id="four" className="five childchild"></div>
-                    <div id="five" className="six childchild"></div>
-                    <div id="six" className="seven childchild"></div>
-                    <div id="seven" className="eight childchild"></div>
-                    <div id="eight" className="nine childchild"></div>
-                </div>
-                <div className="win">
-                    X
-                </div>
-                <div className="win">
-                    O
-                </div>
-            </div>
-
+            ))}
+            <div></div>
+            <button onClick={() => resetBoard()}>Reset</button>
         </div>
     )
 }
-
-export default Board
