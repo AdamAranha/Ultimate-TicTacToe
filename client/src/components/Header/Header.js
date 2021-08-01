@@ -5,17 +5,14 @@ import './Header.css'
 export default function Header() {
 
     const [opponent, setOpponent] = useState('vs. Player 2')
-    let state = true
+
     function showOpponent() {
 
-        if (state) {
-            if (state) {
-                state = false
-            } else {
-                state = true
-            }
+        if (opponent === 'vs. Player 2') {
+            setOpponent('vs. Computer')
+        } else {
+            setOpponent('vs. Player 2')
         }
-        state ? setOpponent('vs. Player 2') : setOpponent('vs. Comp')
     }
 
     return <>
