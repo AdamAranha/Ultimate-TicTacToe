@@ -4,11 +4,7 @@ import './Board.css'
 export default function Board() {
 
     useEffect(() => {
-        let classname = document.getElementsByClassName('childchild');
-        Object.keys(classname).forEach(element => {
-            classname[element].addEventListener('click', registerClick, true);
-            classname[element].className += ' vacant';
-        });
+        resetBoard();
     })
     // placementArray keeps track of x's and o's on the board
     let placementArray = [];
@@ -24,7 +20,6 @@ export default function Board() {
 
 
     function registerClick(event) {
-        console.log(temp())
         if (placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] === 0) {
             placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
             setBoard()
@@ -34,10 +29,6 @@ export default function Board() {
             isPlayer = !isPlayer
         } else {
             console.log("Space occupied")
-        }
-
-        function temp() {
-            return ('It works')
         }
     }
 
@@ -79,6 +70,12 @@ export default function Board() {
         excludeArray = [];
         overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         isPlayer = true
+        let strikeThroughArr = ['h-top', 'h-mid', 'h-bot', 'v-left', 'v-mid', 'v-right', 'd-rtl', 'd-ltr']
+        strikeThroughArr.forEach(item => {
+            if (document.getElementById(item)) {
+                document.getElementById(item).classList.remove('horizontal', 'vertical', 'diagonal-rtl', 'diagonal-ltr')
+            }
+        })
     }
 
     function checkSectionWin() {
@@ -87,26 +84,40 @@ export default function Board() {
             if (excludeArray.includes(index)) {
                 return;
             }
-            if (checkForWin(array)) {
+            if (checkForWin(array).state) {
                 console.log('DING DING DING')
                 changeDisplay(index)
                 removeEffects(index)
                 excludeArray.push(index)
                 overBoard[index] = isPlayer ? 2 : 1
                 checkOverboardWin()
-                console.log(overBoard)
             }
         })
     }
 
     function checkOverboardWin() {
-        if (checkForWin(overBoard)) {
+        if (checkForWin(overBoard).state) {
+            console.log(checkForWin(overBoard))
             console.log("WE HAVE A WINNER!!")
             boardArray.forEach((array, index) => removeEffects(index))
+            switch (checkForWin(overBoard).winCondition.charAt(0)) {
+                case 'h': document.getElementById(checkForWin(overBoard).winCondition).className = 'horizontal'
+                    break;
+                case 'v': document.getElementById(checkForWin(overBoard).winCondition).className = 'vertical'
+                    break;
+                case 'd': if (checkForWin(overBoard).winCondition === 'd-rtl') {
+                    document.getElementById(checkForWin(overBoard).winCondition).className = 'diagonal-rtl'
+                } else {
+                    document.getElementById(checkForWin(overBoard).winCondition).className = 'diagonal-ltr'
+                }
+                    break;
+                default: return
+            }
         }
     }
 
     function checkForWin(array) {
+        let winCondition;
         let currentPlayer = isPlayer ? 2 : 1
         // Purely so I don't aave to write out all the win conditions...again
         function shortCut(num1, num2, num3) {
@@ -114,18 +125,31 @@ export default function Board() {
                 array[num2] === currentPlayer &&
                 array[num3] === currentPlayer)
         }
-        //Horizontal Win Conditions
-        if ((shortCut(0, 1, 2)) || (shortCut(3, 4, 5)) || (shortCut(6, 7, 8))
-            ||
-            //Vertical Win Conditions
-            (shortCut(0, 3, 6)) || (shortCut(1, 4, 7)) || (shortCut(2, 5, 8))
-            ||
-            //Vertical Win Conditions
-            (shortCut(0, 4, 8)) || (shortCut(2, 4, 6))) {
-            return true
-        } else {
-            return false
+        if (shortCut(0, 1, 2)) {
+            winCondition = 'h-top'; return { state: true, winCondition }
         }
+        if (shortCut(3, 4, 5)) {
+            winCondition = 'h-mid'; return { state: true, winCondition }
+        }
+        if (shortCut(6, 7, 8)) {
+            winCondition = 'h-bot'; return { state: true, winCondition }
+        }
+        if (shortCut(0, 3, 6)) {
+            winCondition = 'v-left'; return { state: true, winCondition }
+        }
+        if (shortCut(1, 4, 7)) {
+            winCondition = 'h-mid'; return { state: true, winCondition }
+        }
+        if (shortCut(2, 5, 8)) {
+            winCondition = 'h-right'; return { state: true, winCondition }
+        }
+        if (shortCut(0, 4, 8)) {
+            winCondition = 'd-rtl'; return { state: true, winCondition }
+        }
+        if (shortCut(2, 4, 6)) {
+            winCondition = 'd-ltr'; return { state: true, winCondition }
+        }
+        return { state: false }
     }
 
     function removeEffects(section) {
@@ -143,10 +167,26 @@ export default function Board() {
         document.querySelector(`#${boardArray[index]}`).childNodes[currentPlayer === 2 ? 1 : 2].style.display = 'flex'
     }
 
+    function buttonStrike() {
+        document.getElementById('d-ltr').className = 'diagonal-ltr'
+    }
+
+    function strikeThrough(array) {
+        switch (array) {
+            case "A": return <div><div id="h-top"></div><div id="v-left"></div><div id="d-rtl"></div></div>;
+            case 'B': return <div id="h-mid"></div>
+            case 'C': return <div><div id="v-right"></div><div id="d-ltr"></div></div>
+            case 'D': return <div id="h-mid"></div>
+            case 'G': return <div><div id="h-bot"></div></div>
+
+            default: return
+        }
+    }
+
     return (
         <div className="bigBoard">
             {boardArray.map((array, index) => (
-                <div id={array} className={`${numberArray[index]}Thick child`} key={`${numberArray[index]}Thick child`}>
+                <div id={array} className={`${numberArray[index]}Thick child`} key={`${numberArray[index]}Thickzero`}>
                     <div className="smallBoard-container">
                         {numberArray.map((square) => (
                             <div id={square} className={`${square} childchild`} key={square}></div>
@@ -158,10 +198,11 @@ export default function Board() {
                     <div className="win">
                         <p>O</p>
                     </div>
+                    {strikeThrough(array)}
                 </div>
             ))}
             <div></div>
-            <button onClick={() => resetBoard()}>Reset</button>
+            <button className="reset-button" onClick={() => resetBoard()}>Reset Board</button>
         </div>
     )
 }
