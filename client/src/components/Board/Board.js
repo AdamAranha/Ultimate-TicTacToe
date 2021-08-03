@@ -1,12 +1,26 @@
 import React, { useEffect } from 'react';
 import './Board.css'
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000')
+
 
 export default function Board() {
 
     useEffect(() => {
         resetBoard();
+        socket.on('init', (msg) => {
+            console.table(msg)
+        })
+        socket.on('id', (id) => {
+            console.log(id)
+        })
+        // document.querySelector('.bigBoard').style.pointerEvents = 'none';
+        // document.querySelector('.bigBoard').style.pointerEvents = 'auto';
     })
     // placementArray keeps track of x's and o's on the board
+    let isPlayer = true
+    let excludeArray = [];
     let placementArray = [];
     for (let count = 0; count < 9; count++) {
         placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -15,11 +29,10 @@ export default function Board() {
     let boardArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
     let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
 
-    let isPlayer = true
-    let excludeArray = [];
-
 
     function registerClick(event) {
+        // document.querySelector('.bigBoard').style.pointerEvents = 'none';
+        console.log(event.target.parentNode.parentNode.id + numberArray.indexOf(event.target.id))
         if (placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] === 0) {
             placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
             setBoard()
@@ -89,6 +102,11 @@ export default function Board() {
                 excludeArray.push(index)
                 overBoard[index] = isPlayer ? 2 : 1
                 checkOverboardWin()
+            } else if (checkForWin(array).state === false && checkForWin(array).winCondition === 'tie') {
+                document.querySelector(`#${boardArray[index]}`).childNodes[0].className += ' blur'
+                removeEffects(index)
+                excludeArray.push(index)
+                console.log('Tie')
             }
         })
     }
@@ -98,18 +116,19 @@ export default function Board() {
             console.log(checkForWin(overBoard))
             console.log("WE HAVE A WINNER!!")
             boardArray.forEach((array, index) => removeEffects(index))
+            let location = document.getElementById(checkForWin(overBoard).winCondition)
             switch (checkForWin(overBoard).winCondition.charAt(0)) {
-                case 'h': document.getElementById(checkForWin(overBoard).winCondition).className = 'horizontal'
+                case 'h': location.className = 'horizontal'
                     break;
-                case 'v': document.getElementById(checkForWin(overBoard).winCondition).className = 'vertical'
+                case 'v': location.className = 'vertical'
                     break;
                 case 'd': if (checkForWin(overBoard).winCondition === 'd-rtl') {
-                    document.getElementById(checkForWin(overBoard).winCondition).className = 'diagonal-rtl'
+                    location.className = 'diagonal-rtl'
                 } else {
-                    document.getElementById(checkForWin(overBoard).winCondition).className = 'diagonal-ltr'
+                    location.className = 'diagonal-ltr'
                 }
                     break;
-                default: return
+                default: break;
             }
         }
     }
@@ -146,6 +165,8 @@ export default function Board() {
         }
         if (shortCut(2, 4, 6)) {
             winCondition = 'd-ltr'; return { state: true, winCondition }
+        } if (!array.includes(0)) {
+            winCondition = 'tie'; return { state: false, winCondition }
         }
         return { state: false }
     }

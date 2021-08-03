@@ -11,19 +11,19 @@
 }
 
 .zero,.one,.two,.three,.four,.five{
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #000000;
 }
 
 .zeroThick,.oneThick,.twoThick,.threeThick,.fourThick,.fiveThick{
-    border-bottom: 3px solid black;
+    border-bottom: 3px solid #000000;
 }
 
 .zero,.one,.three,.four,.six,.seven{
-    border-right: 1px solid black;
+    border-right: 1px solid #000000;
 }
 
 .zeroThick,.oneThick,.threeThick,.fourThick,.sixThick,.sevenThick{
-    border-right: 3px solid black;
+    border-right: 3px solid #000000;
 }
 
 .zero{
@@ -57,7 +57,7 @@
     justify-content: center;
     align-items: center;
     padding: 1vh;
-    transition: all 0.2s ease-in-out;
+    transition: background-color 0.15s ease-in-out;
 }
 
 /* .childchild:hover{
@@ -130,7 +130,7 @@
         
         button:hover {
           cursor: pointer;
-          background: rgb(0, 0, 0);
+          background: #000000;
           color: white;
         }
       
@@ -138,7 +138,7 @@
     z-index: 1;
     top: 10.4vh;
     left: 2vh;
-    background-color: rgb(216, 16, 16);
+    background-color: #d81010;
     position: absolute;
     height: 1.5vh;
     width: 5vh;
@@ -155,7 +155,7 @@
     z-index: 1;
     left: 9.75vh;
     top: 2.25vh;
-    background-color: rgb(216, 16, 16);
+    background-color: #d81010;
     position: absolute;
     height: 1.5vh;
     width: 1.5vh;
@@ -173,12 +173,12 @@
 .diagonal-rtl{
     height: 1.5vh;
     width: 1.5vh;
-    background-color: rgb(216, 16, 16);
+    background-color: #d81010;
     transform: rotate(45deg);
     transform-origin:left;
     z-index: 1;
     left: 4vh;
-    top: 3.75vh;
+    top: 3.65vh;
     position: absolute;
     border-radius: 7.5px;
     animation:growDiagonal 1.5s linear forwards;
@@ -187,12 +187,12 @@
 .diagonal-ltr{
     height: 1.5vh;
     width: 1.5vh;
-    background-color: rgb(216, 16, 16);
+    background-color: #d81010;
     transform: rotate(135deg);
     transform-origin:left;
     z-index: 1;
     left: 17vh;
-    top: 3.5vh;
+    top: 3.75vh;
     position: absolute;
     border-radius: 7.5px;
     animation:growDiagonal 1.5s linear forwards;
