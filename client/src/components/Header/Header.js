@@ -18,7 +18,7 @@ export default function Header() {
     return <>
         <Container fluid className='pt-4 px-3'>
             <h2 className='title'>Ultimate Tic Tac Toe <span id="opponent-text">{opponent}</span></h2>
-            {/* <button onClick={() => showOpponent()}>Click</button> */}
+            <button onClick={() => showOpponent()}>Click</button>
             <Alert variant="success">
                 <Alert.Heading>Hey, nice to see you</Alert.Heading>
                 <p>
