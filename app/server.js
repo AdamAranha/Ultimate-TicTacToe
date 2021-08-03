@@ -14,12 +14,15 @@ const PORT = process.env.PORT || 5000
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
 }) // Not working on heroku
 
 // app.get('*', (req, res) => {
 //     res.send('Hello World')
 // }) // This works in heroku
+
+
+
 
 
 io.on('connection', (socket) => {
