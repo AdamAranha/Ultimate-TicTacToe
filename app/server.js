@@ -15,6 +15,9 @@ for (let count = 0; count < 9; count++) {
     placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 }
 
+
+app.use(express.static(path.join(__dirname, '../client/build')));
+
 io.on('connection', (socket) => {
     socket.emit('id', socket.id)
     console.log('New User connected')
