@@ -4,20 +4,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header/Header.js';
 import Board from './components/Board/Board.js'
 
-import io from 'socket.io-client';
-import { useEffect } from 'react';
+// import io from 'socket.io-client';
+import { useState, useEffect } from 'react';
 
-
-let socket
+// const socket = io('http://localhost:5000')
 
 function App() {
 
-  const ENDPOINT = 'http://localhost:5000'
-  useEffect(() => {
+  const [gamemode, setGamemode] = useState('AI')
+  const [currentPlayer, setCurrentPlayer] = useState('Player1')
 
-    socket = io(ENDPOINT)
+  // const ENDPOINT = 'http://localhost:5000'
+
+
+  useEffect(() => {
+    // socket.on('init', (msg) => {
+    //   console.log('The server says', '[' + msg.data + ']')
+    // })
     // console.log(socket)
     console.log(`The viewport dimensions are ${window.innerWidth}x${window.innerHeight}`)
+    console.log(currentPlayer)
   }, [])
 
 
@@ -25,9 +31,7 @@ function App() {
     <div>
       <Header />
       <div className='body-wrapper'>
-
         <Board />
-
       </div>
     </div>
   );
