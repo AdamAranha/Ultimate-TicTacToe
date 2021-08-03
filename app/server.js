@@ -8,6 +8,8 @@ const io = require('socket.io')(http, {
     }
 })
 
+const PORT = 5000 || process.env.PORT
+
 let placementArray = [];
 for (let count = 0; count < 9; count++) {
     placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -21,4 +23,4 @@ io.on('connection', (socket) => {
     console.log(socket.rooms)
 })
 
-http.listen(5000, () => { console.log('Listening on http://localhost:5000') })
+http.listen(PORT, () => { console.log('Listening on http://localhost:5000') })
