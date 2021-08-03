@@ -10,7 +10,7 @@ const io = require('socket.io')(http, {
     }
 })
 
-const PORT = 5000 || process.env.PORT
+const PORT = process.env.PORT || 5000
 
 let placementArray = [];
 for (let count = 0; count < 9; count++) {
@@ -19,9 +19,9 @@ for (let count = 0; count < 9; count++) {
 
 
 app.use(express.static(path.join(__dirname, '../client/build')));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-})
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+// })
 
 io.on('connection', (socket) => {
     socket.emit('id', socket.id)
