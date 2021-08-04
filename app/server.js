@@ -10,7 +10,7 @@ const io = require('socket.io')(http, {
     }
 })
 const PORT = process.env.PORT || 5000
-const STATIC_PATH = process.env.ENV === 'production' ? path.join(__dirname, '../client/build') : path.join(__dirname, '../client/public')
+// const STATIC_PATH = process.env.ENV === 'production' ? path.join(__dirname, '../client/build') : path.join(__dirname, '../client/public')
 
 
 app.use(express.static(path.join(__dirname, '../client/build')));
