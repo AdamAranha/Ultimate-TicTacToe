@@ -35,12 +35,14 @@ export default function Board() {
             currentPlayer: isPlayer ? 2 : 1
         }, function onReturn(response) {
             placementArray = [...response.placementArray]
-            setBoard()
-            isPlayer = !isPlayer
+            setBoard();
+            checkSectionWin();
+            if (response.wasPlaced) {
+                isPlayer = !isPlayer
+            } else { console.log('That space is already occupied') }
         })
         //Changes hover effect of square after is occupied
-        let classList = document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].className
-        document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].className = classList.replace('vacant', 'occupied')
+        document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].classList.replace('vacant', 'occupied')
     }
 
     function setBoard() {
@@ -50,29 +52,20 @@ export default function Board() {
                     square === 0 ? '' : square === 1 ? '<span class="marker">O</span>' : '<span class="marker">X</span>'
             })
         })
-        checkSectionWin()
     }
 
     function resetBoard() {
-        //Removes hover effects and function from all squares because im paranoid and think I'll have duplicates if I don't
-        document.getElementById(boardArray[0]).childNodes[0].childNodes.forEach(item => {
-            item.classList.remove('vacant', 'occupied')
-            item.removeEventListener('click', registerClick, true)
-        })
-        //Adds the hover effects and functions back to all squares
-        let classname = document.getElementsByClassName('childchild');
-        Object.keys(classname).forEach(element => {
-            classname[element].addEventListener('click', registerClick, true);
-            classname[element].className += ' vacant';
-        });
 
-        boardArray.forEach((item, index) => {
-            //Removes blur from sections
-            document.querySelector(`#${item}`).childNodes[0].className = 'smallBoard-container'
-            //Removes the red X or O over the sections
-            document.querySelector(`#${boardArray[index]}`).childNodes[1].style.display = 'none'
-            document.querySelector(`#${boardArray[index]}`).childNodes[2].style.display = 'none'
-        })
+        [...document.getElementsByClassName('childchild')].forEach(square => {
+            square.removeEventListener('click', registerClick, true)
+            square.addEventListener('click', registerClick, true);
+            if (square.classList[2]) {
+                square.classList.replace('occupied', 'vacant')
+            } else square.className += ' vacant';
+        });
+        //Removing Blur and big red symbol from every section
+        [...document.getElementsByClassName('win')].forEach((div) => div.style.display = 'none');
+        [...document.getElementsByClassName('smallBoard-container')].forEach((smallBoard) => smallBoard.classList.remove('blur'));
         //Resetting the arrays to start
         for (let count = 0; count < 9; count++) {
             placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
