@@ -1,3 +1,4 @@
+const { checkAvailability } = require('./utils/boardFunc.js')
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -25,24 +26,15 @@ if (process.env.ENV === 'production') {
     console.log('Make sure the react build is up to date!!')
 }
 
-function checkAvailability(position) {
-    if (placementArray[position.p1][position.p2] === 0) {
-        placementArray[position.p1][position.p2] = position.currentPlayer
-    } else {
-        console.log('Space occupied')
-    }
-    return placementArray
-}
-
 io.on('connection', (socket) => {
     socket.emit('id', socket.id)
     console.log('New User connected')
 
     socket.on('requestPosition', (position, callback) => {
         console.log(position)
-        placementArray = [...checkAvailability(position)]
+        const { placementArray, wasPlaced } = checkAvailability(position)
         callback({
-            placementArray
+            placementArray, wasPlaced
         })
     })
 })
