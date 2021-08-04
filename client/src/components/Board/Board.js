@@ -2,10 +2,17 @@ import React, { useEffect } from 'react';
 import './Board.css'
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:5000')
+const socket = io('/')
 
 
 export default function Board() {
+    // placementArray keeps track of x's and o's on the board
+    let isPlayer = true
+    let excludeArray = [];
+    let placementArray = [];
+    let overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let boardArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
+    let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
 
     useEffect(() => {
         resetBoard();
@@ -18,17 +25,8 @@ export default function Board() {
         // document.querySelector('.bigBoard').style.pointerEvents = 'none';
         // document.querySelector('.bigBoard').style.pointerEvents = 'auto';
     })
-    // placementArray keeps track of x's and o's on the board
-    let isPlayer = true
-    let excludeArray = [];
-    let placementArray = [];
-    let overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    let boardArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
-    let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
 
-    //
     function registerClick(event) {
-
         socket.emit('requestPosition', {
             p1: boardArray.indexOf(event.target.parentNode.parentNode.id),
             p2: numberArray.indexOf(event.target.id),
@@ -40,8 +38,7 @@ export default function Board() {
             if (response.wasPlaced) {
                 isPlayer = !isPlayer
             } else { console.log('That space is already occupied') }
-        })
-        //Changes hover effect of square after is occupied
+        }) //Changes hover effect of square after is occupied
         document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].classList.replace('vacant', 'occupied')
     }
 
@@ -55,7 +52,11 @@ export default function Board() {
     }
 
     function resetBoard() {
-
+        socket.emit('reset', { reset: true },
+            function onReturn(response) {
+                placementArray = [...response.placementArray]
+                setBoard();
+            });
         [...document.getElementsByClassName('childchild')].forEach(square => {
             square.removeEventListener('click', registerClick, true)
             square.addEventListener('click', registerClick, true);
@@ -67,10 +68,6 @@ export default function Board() {
         [...document.getElementsByClassName('win')].forEach((div) => div.style.display = 'none');
         [...document.getElementsByClassName('smallBoard-container')].forEach((smallBoard) => smallBoard.classList.remove('blur'));
         //Resetting the arrays to start
-        for (let count = 0; count < 9; count++) {
-            placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-        }
-        // setBoard()
         excludeArray = [];
         overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         isPlayer = true
@@ -81,7 +78,6 @@ export default function Board() {
     }
 
     function checkSectionWin() {
-        // console.table(placementArray)
         placementArray.forEach((array, index) => {
             //Ignores array that has already been won
             if (excludeArray.includes(index)) {
