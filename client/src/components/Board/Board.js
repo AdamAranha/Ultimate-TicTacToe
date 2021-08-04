@@ -22,27 +22,25 @@ export default function Board() {
     let isPlayer = true
     let excludeArray = [];
     let placementArray = [];
-    for (let count = 0; count < 9; count++) {
-        placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    }
     let overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
     let boardArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
     let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
 
-
+    //
     function registerClick(event) {
-        // document.querySelector('.bigBoard').style.pointerEvents = 'none';
-        console.log(event.target.parentNode.parentNode.id + numberArray.indexOf(event.target.id))
-        if (placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] === 0) {
-            placementArray[boardArray.indexOf(event.target.parentNode.parentNode.id)][numberArray.indexOf(event.target.id)] = isPlayer ? 2 : 1
+
+        socket.emit('requestPosition', {
+            p1: boardArray.indexOf(event.target.parentNode.parentNode.id),
+            p2: numberArray.indexOf(event.target.id),
+            currentPlayer: isPlayer ? 2 : 1
+        }, function onReturn(response) {
+            placementArray = [...response.placementArray]
             setBoard()
-            //Changes hover colour of squares from green to red when they become occupied
-            let classList = document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].className
-            document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].className = classList.replace('vacant', 'occupied')
             isPlayer = !isPlayer
-        } else {
-            console.log("Space occupied")
-        }
+        })
+        //Changes hover effect of square after is occupied
+        let classList = document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].className
+        document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].className = classList.replace('vacant', 'occupied')
     }
 
     function setBoard() {
@@ -52,7 +50,7 @@ export default function Board() {
                     square === 0 ? '' : square === 1 ? '<span class="marker">O</span>' : '<span class="marker">X</span>'
             })
         })
-        checkSectionWin();
+        checkSectionWin()
     }
 
     function resetBoard() {
@@ -79,7 +77,7 @@ export default function Board() {
         for (let count = 0; count < 9; count++) {
             placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         }
-        setBoard()
+        // setBoard()
         excludeArray = [];
         overBoard = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         isPlayer = true
@@ -90,6 +88,7 @@ export default function Board() {
     }
 
     function checkSectionWin() {
+        // console.table(placementArray)
         placementArray.forEach((array, index) => {
             //Ignores array that has already been won
             if (excludeArray.includes(index)) {
@@ -152,7 +151,9 @@ export default function Board() {
             winCondition = 'h-bot'; return { state: true, winCondition }
         }
         if (shortCut(0, 3, 6)) {
-            winCondition = 'v-left'; return { state: true, winCondition }
+            winCondition = 'v-left';
+            console.log('noted')
+            return { state: true, winCondition }
         }
         if (shortCut(1, 4, 7)) {
             winCondition = 'v-mid'; return { state: true, winCondition }
