@@ -3,6 +3,13 @@ for (let count = 0; count < 9; count++) {
     placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 }
 
+function resetBoard() {
+    for (let count = 0; count < 9; count++) {
+        placementArray[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
+    return placementArray
+}
+
 function checkAvailability(position) {
     let wasPlaced;
     if (placementArray[position.p1][position.p2] === 0) {
@@ -15,4 +22,4 @@ function checkAvailability(position) {
     return { placementArray, wasPlaced }
 }
 
-module.exports = { checkAvailability }
+module.exports = { checkAvailability, resetBoard }
