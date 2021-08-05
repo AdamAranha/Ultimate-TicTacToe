@@ -256,12 +256,12 @@
 
     .horizontal{
         z-index: 1;
-        top: 6.5vh;
-        left: 2vh;
+        top: 55px;
+        left: 17px;
         background-color: #d81010;
         position: absolute;
-        height: 1.5vh;
-        width: 5vh;
+        height: 10px;
+        width: 0;
         border-radius: 7.5px;
         animation:growHorizontal 1.5s linear forwards;
     }
@@ -274,12 +274,12 @@
 
     .vertical{
         z-index: 1;
-        left: 6.55vh;
-        top: 1.75vh;
+        left: 55px;
+        top: 15px;
         background-color: #d81010;
         position: absolute;
-        height: 1.5vh;
-        width: 1.5vh;
+        height: 0;
+        width: 12px;
         border-radius: 7.5px;
         animation:growVertical 1.5s linear forwards;
     }
@@ -292,35 +292,35 @@
     }
 
     .diagonal-rtl{
-        height: 1.5vh;
-        width: 1.5vh;
+        height: 10px;
+        width: 0;
         background-color: #d81010;
         transform: rotate(135deg);
         transform-origin:left;
         z-index: 1;
-        left:12vh;
-        top: 1.6vh;
+        left:105px;
+        top: 12px;
         position: absolute;
         border-radius: 7.5px;
         animation:growDiagonal 1.5s linear forwards;
     }
     
     .diagonal-ltr{
-        height: 1.5vh;
-        width: 1.5vh;
+        height: 10px;
+        width: 0;
         background-color: #d81010;
         transform: rotate(45deg);
         transform-origin:left;
         z-index: 1;
-        left: 2.5vh;
-        top: 1.60vh;
+        left: 20px;
+        top: 15px;
         position: absolute;
         border-radius: 7.5px;
         animation:growDiagonal 1.5s linear forwards;
     }
     @keyframes growDiagonal{
         to {
-            width: 450px;
+            width: 460px;
         }
     }
     
