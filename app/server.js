@@ -11,7 +11,7 @@ const io = require('socket.io')(http, {
 })
 const PORT = process.env.PORT || 5000
 // const STATIC_PATH = process.env.ENV === 'production' ? path.join(__dirname, '../client/build') : path.join(__dirname, '../client/public')
-
+const message = 'Greetings!'
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
@@ -24,7 +24,10 @@ if (process.env.ENV === 'production') {
 
 io.on('connection', (socket) => {
     socket.emit('id', socket.id)
+    console.log(socket.id)
     console.log('New User connected')
+    // console.log(io.sockets.adapter.rooms)
+    socket.to(socket.id).emit('greeting', message)
 
     socket.on('reset', (position, callback) => {
         const placementArray = resetBoard()
@@ -40,6 +43,8 @@ io.on('connection', (socket) => {
             placementArray, wasPlaced
         })
     })
+
+
 })
 
 http.listen(PORT, () => { console.log(`Listening on http://localhost:${PORT}`) })
