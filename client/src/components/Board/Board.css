@@ -251,7 +251,7 @@
         align-items: center;
         pointer-events: none;
         animation: fadeIn 1s;
-        padding: 10px;
+        margin: 10px;
     }
 
     .horizontal{
