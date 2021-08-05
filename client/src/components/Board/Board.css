@@ -10,6 +10,19 @@
     position: relative;
 }
 
+.childchild{
+    height: 5.6vh;
+    width: 5.6vh;
+    /* background-color: purple; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh;
+    transition: background-color 0.15s ease-in-out;
+}
+
+
+
 .zero,.one,.two,.three,.four,.five{
     border-bottom: 1px solid #000000;
 }
@@ -49,16 +62,7 @@
     position: absolute;
 }
 
-.childchild{
-    height: calc(17vh/3);
-    width: calc(17vh/3);
-    /* background-color: purple; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1vh;
-    transition: background-color 0.15s ease-in-out;
-}
+
 
 /* .childchild:hover{
     background-color: #77ff8e;
@@ -202,6 +206,33 @@
     to {
         width: 78vh;
     }
+}
+
+
+@media only screen and (max-width: 850px){
+    .child{
+        height: 120px;
+        width: 120px;
+        position: relative;
+    }
+
+    .childchild{
+        height: 33px;
+        width: 33px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* padding: .3vh; */
+        transition: background-color 0.15s ease-in-out;
+    }
+
+    .smallBoard-container{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        padding: 10px;
+        position: absolute;
+    }
+    
 }
 
 

@@ -22,6 +22,9 @@ export default function Board() {
         socket.on('id', (id) => {
             console.log(id)
         })
+        socket.on('greeting', (greeting) => {
+            console.log(greeting)
+        })
         // document.querySelector('.bigBoard').style.pointerEvents = 'none';
         // document.querySelector('.bigBoard').style.pointerEvents = 'auto';
     })
@@ -206,8 +209,8 @@ export default function Board() {
                     {strikeThrough(array)}
                 </div>
             ))}
-            <div></div>
-            <button className="reset-button" onClick={() => resetBoard()}>Reset Board</button>
+            {/* <div></div>
+            <button className="reset-button" onClick={() => resetBoard()}>Reset Board</button> */}
         </div>
     )
 }
