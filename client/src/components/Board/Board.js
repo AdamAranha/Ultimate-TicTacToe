@@ -209,8 +209,8 @@ export default function Board() {
                     {strikeThrough(array)}
                 </div>
             ))}
-            {/* <div></div>
-            <button className="reset-button" onClick={() => resetBoard()}>Reset Board</button> */}
+            <div></div>
+            <button className="reset-button" onClick={() => resetBoard()}>Reset Board</button>
         </div>
     )
 }
