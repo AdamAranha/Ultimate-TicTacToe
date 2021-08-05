@@ -154,10 +154,10 @@ export default function Board() {
             winCondition = 'v-right'; return { state: true, winCondition }
         }
         if (shortCut(0, 4, 8)) {
-            winCondition = 'd-rtl'; return { state: true, winCondition }
+            winCondition = 'd-ltr'; return { state: true, winCondition }
         }
         if (shortCut(2, 4, 6)) {
-            winCondition = 'd-ltr'; return { state: true, winCondition }
+            winCondition = 'd-rtl'; return { state: true, winCondition }
         } if (!array.includes(0)) {
             winCondition = 'tie'; return { state: false, winCondition }
         }
@@ -182,9 +182,9 @@ export default function Board() {
     //Animates a line moving throught the winning row/column/etc
     function strikeThrough(array) {
         switch (array) {
-            case "A": return <div><div id="h-top"></div><div id="v-left"></div><div id="d-rtl"></div></div>;
+            case "A": return <div><div id="h-top"></div><div id="v-left"></div><div id="d-ltr"></div></div>;
             case 'B': return <div id="v-mid"></div>
-            case 'C': return <div><div id="v-right"></div><div id="d-ltr"></div></div>
+            case 'C': return <div><div id="v-right"></div><div id="d-rtl"></div></div>
             case 'D': return <div id="h-mid"></div>
             case 'G': return <div><div id="h-bot"></div></div>
             default: break;
