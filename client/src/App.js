@@ -11,19 +11,8 @@ import { useState, useEffect } from 'react';
 
 function App() {
 
-  const [gamemode, setGamemode] = useState('AI')
-  const [currentPlayer, setCurrentPlayer] = useState('Player1')
-
-  // const ENDPOINT = 'http://localhost:5000'
-
-
   useEffect(() => {
-    // socket.on('init', (msg) => {
-    //   console.log('The server says', '[' + msg.data + ']')
-    // })
-    // console.log(socket)
     console.log(`The viewport dimensions are ${window.innerWidth}x${window.innerHeight}`)
-    console.log(currentPlayer)
   }, [])
 
 
