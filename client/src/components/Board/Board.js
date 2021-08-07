@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import './Board.css'
 import io from 'socket.io-client';
 
-const socket = io('/')
+const socket = io('http://localhost:5000')
 
 
-export default function Board() {
+export default function Board({ opponent }) {
     // placementArray keeps track of x's and o's on the board
     let isPlayer = true
     let excludeArray = [];
@@ -22,11 +22,12 @@ export default function Board() {
         socket.on('id', (id) => {
             console.log(id)
         })
-        socket.on('greeting', (greeting) => {
+        socket.on('newMessage', (greeting) => {
             console.log(greeting)
         })
         // document.querySelector('.bigBoard').style.pointerEvents = 'none';
         // document.querySelector('.bigBoard').style.pointerEvents = 'auto';
+        console.log(opponent)
     })
 
     function registerClick(event) {

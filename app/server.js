@@ -26,8 +26,8 @@ io.on('connection', (socket) => {
     socket.emit('id', socket.id)
     console.log(socket.id)
     console.log('New User connected')
-    socket.join('newRoom')
-    io.sockets.to('newRoom').emit('newMessage', 'WE DID IT!!')
+    // socket.join('newRoom')
+    io.sockets.to(socket.id).emit('newMessage', 'WE DID IT!!')
     // console.log(io.sockets.adapter.rooms)
     // issocket.to(socket.id).emit('greeting', message)
 

@@ -1,37 +1,39 @@
 import React, { useState } from 'react';
 import { Container, Alert } from 'react-bootstrap';
 import './Header.css'
+import { ReactComponent as YourSvg } from './ttt-logo.svg'
+import { ReactComponent as LogoLong } from './ttt-logo-long.svg'
+import { ReactComponent as HamburgerMenu } from './hamburger-menu.svg'
+
+
 
 export default function Header() {
 
-    const [opponent, setOpponent] = useState(null)
+    const [opponent, setOpponent] = useState('Program')
 
     function showOpponent() {
 
-        if (opponent === 'vs. Player 2') {
-            setOpponent('vs. AI')
+        if (opponent === 'User') {
+            setOpponent('Program')
+            document.getElementById('opponent-text').style.color = '#FF7920'
         } else {
-            setOpponent('vs. Player 2')
+            setOpponent('User')
+            document.getElementById('opponent-text').style.color = '#104be0'
         }
     }
 
     return <>
-        <Container fluid className='pt-4 px-3'>
-            <h2 className='title'>Ultimate Tic Tac Toe <span id="opponent-text">{opponent}</span></h2>
-            <button onClick={() => showOpponent()}>Click</button>
-            <Alert variant="success">
-                <Alert.Heading>Hey, nice to see you</Alert.Heading>
-                <p>
-                    Aww yeah, you successfully read this important alert message. This example
-                    text is going to run a bit longer so that you can see how spacing within an
-                    alert works with this kind of content.
-                </p>
-                <hr />
-                <p className="mb-0">
-                    Whenever you need to, be sure to use margin utilities to keep things nice
-                    and tidy.
-                </p>
-            </Alert>
-        </Container>
+        <div className='header-container'>
+            <div className='logo'>
+                {/* <LogoLong /> */}
+                <YourSvg onClick={() => console.log('Clicking on the SVG works')} />
+                <h2 id='opponent-text'>{opponent}</h2>
+            </div>
+            <div className='whatever'>
+                {/* <button onClick={() => showOpponent()}>Change Gamemode</button> */}
+                <HamburgerMenu id="hamburger-menu" onClick={() => showOpponent()} />
+            </div>
+        </div>
+
     </>
 }

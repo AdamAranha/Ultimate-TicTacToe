@@ -1,2 +1,43 @@
+#opponent-text {
+color: #FF7920;
+}
+
+.header-container{
+    padding: 10px;
+    /* border: 1px solid black;
+    border-radius: 5px; */
+    display: flex;
+    justify-content: space-between;
+}
+
+.title{
+    margin: 0;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+}
+
+.whatever{
+    display: flex;
+    align-items: center;
+}
+
 #opponent-text{
-color: #ff7f50;}
+    margin-left: 3px;
+    margin-bottom: 12px;
+}
+
+@media only screen and (max-width: 850px){
+    #opponent-text{
+        /* margin-left: 3px; */
+        margin-bottom: 12px;
+    }
+
+    #hamburger-menu{
+        margin-right: 10px;
+    }
+
+    
+}

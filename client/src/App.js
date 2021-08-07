@@ -11,6 +11,8 @@ import { useState, useEffect } from 'react';
 
 function App() {
 
+  const [opponent, setOpponent] = useState('program')
+
   useEffect(() => {
     console.log(`The viewport dimensions are ${window.innerWidth}x${window.innerHeight}`)
   }, [])
@@ -20,7 +22,7 @@ function App() {
     <div>
       <Header />
       <div className='body-wrapper'>
-        <Board />
+        <Board opponent={opponent} />
       </div>
     </div>
   );
