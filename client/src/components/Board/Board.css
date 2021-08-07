@@ -38,12 +38,6 @@
     transition: all 0.2s ease-in-out;
     border-radius: 7.5px;
   }
-  
-  .reset-button:hover {
-    cursor: pointer;
-    background: #000000;
-    color: white;
-  }
 
 .zero,.one,.two,.three,.four,.five{
     border-bottom: 1px solid #000000;
@@ -77,19 +71,6 @@
     border-radius: 0px 0px 10px 0px;
 }
 
-.vacant:hover{
-    background-color: #77ff8e;
-    cursor: pointer;
-}
-
-.occupied:hover{
-    background-color: #fd5a5a;
-}
-
-.endgame:hover{
-    background-color: none;
-}
-
 .marker{
     font-size: 4vh;
     pointer-events: none
@@ -113,22 +94,20 @@
     animation: fadeIn 1s;
 }
 
-    @keyframes fadeIn {
+@keyframes fadeIn {
         from {
-          opacity: 0;
+            opacity: 0;
         }
-      
-        to{
-          opacity: 1;
-        }
-      }
-
-      .reset-button {
-        margin-top: 4vh;
-        /* margin: 10px; */
-      }
-      
         
+        to{
+            opacity: 1;
+        }
+    }
+
+    .reset-button {
+    margin-top: 4vh;
+    /* margin: 10px; */
+    }
       
 .horizontal{
     z-index: 1;
@@ -315,7 +294,27 @@
             width: 460px;
         }
     }
+}
+
+@media (hover: hover) {
+    .reset-button:hover {
+        cursor: pointer;
+        background: #000000;
+        color: white;
+      }
+
+      .vacant:hover{
+        background-color: #77ff8e;
+        cursor: pointer;
+    }
     
+    .occupied:hover{
+        background-color: #fd5a5a;
+    }
+    
+    .endgame:hover{
+        background-color: none;
+    }
 }
 
 

@@ -1,5 +1,6 @@
 #opponent-text {
 color: #FF7920;
+margin-top: 10px;
 }
 
 .header-container{
@@ -38,6 +39,4 @@ color: #FF7920;
     #hamburger-menu{
         margin-right: 10px;
     }
-
-    
 }
