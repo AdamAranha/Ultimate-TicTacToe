@@ -1,6 +1,5 @@
 #opponent-text {
 color: #FF7920;
-margin-top: 10px;
 }
 
 .header-container{
@@ -30,13 +29,42 @@ margin-top: 10px;
     margin-bottom: 12px;
 }
 
+.header-changeGamemode{
+    outline: none;
+    border: 4px solid ;
+    padding: 10px 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    background: none;
+    transition: all 0.2s ease-in-out;
+    border-radius: 7.5px;
+}
+
+.header-hamburger-menu,.header-logo-short{
+    display: none;
+}
+
+.header-logo-long{
+    display: block;
+}
+
 @media only screen and (max-width: 850px){
     #opponent-text{
         /* margin-left: 3px; */
-        margin-bottom: 12px;
+        /* margin-bottom: 12px; */
+        margin-top: 10px;
     }
 
-    #hamburger-menu{
+    .header-hamburger-menu{
+        display: block;
         margin-right: 10px;
+    }
+
+    .header-changeGamemode,.header-logo-long{
+        display: none;
+    }
+
+    .header-logo-short{
+        display: block;
     }
 }
