@@ -4,7 +4,8 @@ import './App.css';
 import Header from './components/Header/Header.js';
 import Board from './components/Board/Board.js'
 import { useState, useEffect } from 'react';
-
+import io from 'socket.io-client';
+const socket = io('http://localhost:5000')
 
 function App() {
 
@@ -16,9 +17,9 @@ function App() {
 
   return (
     <div>
-      <Header />
+      <Header socket={socket} />
       <div className='body-wrapper'>
-        <Board opponent={opponent} />
+        <Board socket={socket} opponent={opponent} />
       </div>
     </div>
   );
