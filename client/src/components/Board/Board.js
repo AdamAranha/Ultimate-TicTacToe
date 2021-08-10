@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react';
 import './Board.css'
-import io from 'socket.io-client';
 
-const socket = io('/')
-
-
-export default function Board({ opponent }) {
+export default function Board({ opponent, socket }) {
     // placementArray keeps track of x's and o's on the board
     let isPlayer = true
     let excludeArray = [];
@@ -28,6 +24,10 @@ export default function Board({ opponent }) {
         // document.querySelector('.bigBoard').style.pointerEvents = 'none';
         // document.querySelector('.bigBoard').style.pointerEvents = 'auto';
         console.log(opponent)
+        socket.on('redoCalled', () => {
+            console.log('redoCalled called')
+            resetBoard();
+        })
     })
 
     function registerClick(event) {
@@ -210,7 +210,9 @@ export default function Board({ opponent }) {
                     {strikeThrough(array)}
                 </div>
             ))}
-            <div></div>
+            <button className='reset-button' onClick={() => {
+                socket.emit('redo')
+            }}> Test Button</button>
             <button className="reset-button" onClick={() => resetBoard()}>Reset Board</button>
         </div>
     )
