@@ -1,0 +1,99 @@
+.modal-container{
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    height: 15vh;
+    width: 30vh;
+    background-color:red;
+    border-radius: 5px;
+    display: block;
+    z-index: 2;
+    background-color:white;
+    border: 2px solid black;
+}
+
+.modal-buttonGroup{
+    width: 200px;
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.modal-text{
+    text-align: center;
+    position: relative;
+    top: 20px;
+    font-weight: 500;
+}
+
+.button{
+    outline: none;
+    border: 2px solid ;
+    padding: 5px 10px;
+    width: 70px;
+    font-size: 1rem;
+    font-weight: bold;
+    background: none;
+    transition: all 0.2s ease-in-out;
+    border-radius: 7.5px;
+}
+
+.modal-dimScreen{
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    opacity: 50%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+
+@media only screen and (max-width: 850px){
+    .modal-container{
+        display: block;
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    
+        height: 150px;
+        width: 300px;
+        background-color:white;
+        border: 2px solid black;
+    }
+
+    .modal-buttonGroup{
+        width: 200px;
+        position: absolute;
+        top: 75%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .modal-text{
+        position: relative;
+        top: 20px;
+        font-weight: 500;
+    }
+
+    .button{
+        outline: none;
+        border: 2px solid ;
+        padding: 5px 10px;
+        width: 70px;
+        font-size: 1rem;
+        font-weight: bold;
+        background: none;
+        transition: all 0.2s ease-in-out;
+        border-radius: 7.5px;
+    }
+}
