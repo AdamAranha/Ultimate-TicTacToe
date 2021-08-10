@@ -17,3 +17,7 @@ color: white;
   height: 70vh;
   width: 70vh;
 }
+
+.app-modal{
+  display: none;
+}
