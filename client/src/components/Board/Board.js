@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './Board.css'
 import io from 'socket.io-client';
 
-const socket = io('/')
+const socket = io('http://localhost:5000')
 
 
 export default function Board({ opponent }) {
