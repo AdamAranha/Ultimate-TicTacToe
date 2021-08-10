@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './Modal.css'
 
-export default function Modal({ message, show, close, showOpponent, avoid1, avoid2 }) {
+export default function Modal({ message, show, close, showOpponent, avoid1, avoid2, socket }) {
 
     const modelRef = useRef()
 
@@ -30,6 +30,7 @@ export default function Modal({ message, show, close, showOpponent, avoid1, avoi
                         <p className='modal-text'>{message}</p>
                         <div className='modal-buttonGroup'>
                             <button className='button' onClick={() => {
+                                socket.emit('redo')
                                 close()
                                 showOpponent()
                             }}>Ok</button>
