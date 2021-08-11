@@ -40,8 +40,21 @@ export default function Header({ socket }) {
             </div>
             <Modal socket={socket} show={showModal} close={toggle} showOpponent={showOpponent} avoid1={avoidRef1} avoid2={avoidRef2} className='app-modal' message='You are about to start a new game, current game progress will be lost.' />
 
-            <div className='whatever'>
+            <div className='header-fullscreen-gameOptions'>
+                {opponent === 'User' ?
+                    <div className='header-userOptions'>
+                        <div className='header-id'>
+                            ID:{socket.id}
+                        </div>
+                        <form className='header-search'>
+                            <input type='text' className='header-searchInput' placeholder='Search for a friend'></input>
+                            <button className='header-searchButton' onClick={() => { console.log(opponent) }}>Search</button>
+                        </form>
+                    </div>
+                    : null}
                 <button ref={avoidRef1} className='header-changeGamemode' onClick={() => toggle()}>Change Gamemode</button>
+            </div>
+            <div className='header-mobile-gameOptions'>
                 <HamburgerMenu ref={avoidRef2} className="header-hamburger-menu" onClick={() => toggle()} />
             </div>
 
