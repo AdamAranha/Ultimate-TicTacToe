@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('redo', (e) => {
-        console.log('Redo called')
+        // console.log('Redo called')
         const placementArray = resetBoard()
         socket.emit('redoCalled', placementArray)
     })
