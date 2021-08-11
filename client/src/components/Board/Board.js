@@ -25,7 +25,7 @@ export default function Board({ opponent, socket }) {
         // document.querySelector('.bigBoard').style.pointerEvents = 'auto';
         console.log(opponent)
         socket.on('redoCalled', () => {
-            console.log('redoCalled called')
+            // console.log('redoCalled called')
             resetBoard();
         })
     })

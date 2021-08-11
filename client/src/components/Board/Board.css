@@ -297,7 +297,7 @@
 }
 
 @media (hover: hover) {
-    .reset-button:hover {
+    button:hover {
         cursor: pointer;
         background: #000000;
         color: white;
