@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     console.log('New User connected')
     // socket.join('newRoom')
     io.sockets.to(socket.id).emit('newMessage', 'WE DID IT!!')
-    // console.log(io.sockets.adapter.rooms)
+    console.log(io.sockets.adapter.rooms)
     // issocket.to(socket.id).emit('greeting', message)
 
     socket.on('reset', (position, callback) => {
@@ -55,8 +55,13 @@ io.on('connection', (socket) => {
     socket.on('searchUser', (query) => {
         if (io.sockets.adapter.rooms.has(query)) {
             io.sockets.to(query).emit('joinRequest', socket.id)
-        }
+            console.log('User found')
+        } else { console.log('User not found') }
+    })
 
+    socket.on('challengeAccepted', (values) => {
+        socket.join(values.challenger)
+        socket.leave(socket.id)
     })
 
 
