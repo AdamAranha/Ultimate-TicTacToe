@@ -71,21 +71,42 @@
     border-radius: 0px 0px 10px 0px;
 }
 
-.marker{
+.markerX{
     font-size: 4vh;
-    pointer-events: none
+    pointer-events: none;
+    color: red;
+}
+
+.markerO{
+    font-size: 4vh;
+    pointer-events: none;
+    color: blue;
 }
 
 .blur {
     filter: blur(4px);
   }
 
-.win{
+.winX{
     position: absolute;
     height: 21vh;
     width: 21vh;
     font-size: 20vh;
     color: #ff3a3a;
+    line-height: 70%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    animation: fadeIn 1s;
+}
+
+.winO{
+    position: absolute;
+    height: 21vh;
+    width: 21vh;
+    font-size: 20vh;
+    color: blue;
     line-height: 70%;
     display: none;
     justify-content: center;
@@ -205,9 +226,16 @@
         position: absolute;
     }
 
-    .marker{
+    .markerX{
         font-size: 20px;
-        pointer-events: none
+        pointer-events: none;
+        color: red;
+    }
+
+    .markerO{
+        font-size: 20px;
+        pointer-events: none;
+        color: blue;
     }
 
     .win{
