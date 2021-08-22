@@ -5,7 +5,7 @@ import Header from './components/Header/Header.js';
 import Board from './components/Board/Board.js'
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-const socket = io('/')
+const socket = io('http://localhost:5000')
 
 function App() {
 
