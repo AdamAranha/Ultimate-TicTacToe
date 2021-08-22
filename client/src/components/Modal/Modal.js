@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './Modal.css'
 
-export default function Modal({ message, show, close, showOpponent, avoid1, avoid2, socket }) {
+export default function Modal({ modalSetting, challenger, message, show, close, showOpponent, avoid1, avoid2, socket }) {
 
     const modelRef = useRef()
 
@@ -27,15 +27,31 @@ export default function Modal({ message, show, close, showOpponent, avoid1, avoi
                 <div>
                     <div className='modal-dimScreen'></div>
                     <div className='modal-container' ref={modelRef}>
-                        <p className='modal-text'>{message}</p>
-                        <div className='modal-buttonGroup'>
-                            <button className='button' onClick={() => {
-                                socket.emit('redo')
-                                close()
-                                showOpponent()
-                            }}>Ok</button>
-                            <button className='button' onClick={() => close()}>Cancel</button>
-                        </div>
+                        {modalSetting === 'gamemode' ?
+                            <div>
+                                <p className='modal-text'>{message}</p>
+                                <div className='modal-buttonGroup'>
+                                    <button className='button' onClick={() => {
+                                        socket.emit('redo')
+                                        close()
+                                        showOpponent()
+                                    }}>Ok</button>
+                                    <button className='button' onClick={() => close()}>Cancel</button>
+                                </div>
+                            </div>
+                            :
+                            <div>
+                                <p className='modal-text'>Accept Challenge from {challenger}?</p>
+                                <div className='modal-buttonGroup'>
+                                    <button className='button' onClick={() => {
+                                        socket.emit('challengeAccepted', { challenger: challenger, user: socket.id })
+                                        close()
+                                    }}>Accept</button>
+                                    <button className='button' onClick={() => close()}>Cancel</button>
+                                </div>
+                            </div>
+                        }
+
 
                     </div>
                 </div>
