@@ -12,6 +12,7 @@ export default function Header({ socket }) {
 
     const [opponent, setOpponent] = useState('Program')
     const [showModal, setShowModal] = useState(false)
+    const [searchUser, setSearchUser] = useState('')
     const avoidRef1 = useRef();
     const avoidRef2 = useRef();
 
@@ -31,6 +32,10 @@ export default function Header({ socket }) {
         }
     }
 
+    function handleChange(event) {
+        setSearchUser(event.target.value)
+    }
+
     return <>
         <div className='header-container'>
             <div className='logo'>
@@ -47,8 +52,11 @@ export default function Header({ socket }) {
                             ID:{socket.id}
                         </div>
                         <form className='header-search'>
-                            <input type='text' className='header-searchInput' placeholder='Search for a friend'></input>
-                            <button className='header-searchButton' onClick={() => { console.log(opponent) }}>Search</button>
+                            <input type='text' className='header-searchInput' value={searchUser} onChange={(event) => handleChange(event)} placeholder='Search for a friend'></input>
+                            <button className='header-searchButton' onClick={(event) => {
+                                event.preventDefault()
+                                socket.emit('searchUser', searchUser)
+                            }}>Search</button>
                         </form>
                     </div>
                     : null}
