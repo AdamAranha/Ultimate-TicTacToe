@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Container, Alert } from 'react-bootstrap';
 import './Header.css'
 import { ReactComponent as LogoShort } from './ttt-logo.svg'
@@ -13,9 +13,19 @@ export default function Header({ socket }) {
     const [opponent, setOpponent] = useState('Program')
     const [showModal, setShowModal] = useState(false)
     const [searchUser, setSearchUser] = useState('')
+    const [modalSetting, setModalSetting] = useState('gamemode')
+    const [challenger, setChallenger] = useState(null)
     const avoidRef1 = useRef();
     const avoidRef2 = useRef();
 
+    useEffect(() => {
+        socket.on('joinRequest', (value) => {
+            setModalSetting('joinRequest')
+            console.log('Challenge issued')
+            setChallenger(value)
+            toggle()
+        })
+    })
 
     function toggle() {
         setShowModal(!showModal)
@@ -43,7 +53,7 @@ export default function Header({ socket }) {
                 <LogoShort className='header-logo-short' onClick={() => console.log('Clicking on the SVG works')} />
                 <h2 id='opponent-text'>{opponent}</h2>
             </div>
-            <Modal socket={socket} show={showModal} close={toggle} showOpponent={showOpponent} avoid1={avoidRef1} avoid2={avoidRef2} className='app-modal' message='You are about to start a new game, current game progress will be lost.' />
+            <Modal challenger={challenger} modalSetting={modalSetting} socket={socket} show={showModal} close={toggle} showOpponent={showOpponent} avoid1={avoidRef1} avoid2={avoidRef2} className='app-modal' message='You are about to start a new game, current game progress will be lost.' />
 
             <div className='header-fullscreen-gameOptions'>
                 {opponent === 'User' ?
