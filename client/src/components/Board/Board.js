@@ -50,7 +50,7 @@ export default function Board({ opponent, socket }) {
         placementArray.forEach((array, arrayIndex) => {
             array.forEach((square, squareIndex) => {
                 document.querySelector(`#${boardArray[arrayIndex]}`).childNodes[0].childNodes[squareIndex].innerHTML =
-                    square === 0 ? '' : square === 1 ? '<span class="marker">O</span>' : '<span class="marker">X</span>'
+                    square === 0 ? '' : square === 1 ? '<span class="markerO">O</span>' : '<span class="markerX">X</span>'
             })
         })
     }
@@ -201,10 +201,10 @@ export default function Board({ opponent, socket }) {
                             <div id={square} className={`${square} childchild`} key={square}></div>
                         ))}
                     </div>
-                    <div className="win">
+                    <div className="winX">
                         <p>X</p>
                     </div>
-                    <div className="win">
+                    <div className="winO">
                         <p>O</p>
                     </div>
                     {strikeThrough(array)}
