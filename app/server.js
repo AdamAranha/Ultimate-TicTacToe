@@ -52,6 +52,13 @@ io.on('connection', (socket) => {
         })
     })
 
+    socket.on('searchUser', (query) => {
+        if (io.sockets.adapter.rooms.has(query)) {
+            io.sockets.to(query).emit('joinRequest', socket.id)
+        }
+
+    })
+
 
 })
 
