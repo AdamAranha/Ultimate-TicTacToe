@@ -3,6 +3,7 @@ import './Board.css'
 
 export default function Board({ opponent, socket }) {
     // placementArray keeps track of x's and o's on the board
+    let socketId = '';
     let isPlayer = true
     let excludeArray = [];
     let placementArray = [];
@@ -16,6 +17,7 @@ export default function Board({ opponent, socket }) {
             console.table(msg)
         })
         socket.on('id', (id) => {
+            socketId = id;
             console.log(id)
         })
         socket.on('newMessage', (greeting) => {
@@ -27,6 +29,26 @@ export default function Board({ opponent, socket }) {
         socket.on('redoCalled', () => {
             // console.log('redoCalled called')
             resetBoard();
+        })
+
+        socket.on('testBroadcast', (message) => {
+            console.log(message)
+            console.log(message.currentPlayer === socketId)
+            if (message.currentPlayer === socketId) {
+
+                switch (message.command) {
+                    case 'addEventListeners':
+                        addEventListeners();
+                        console.log('Event Listeners Added')
+                        break;
+                    case 'removeEventListeners':
+                        removeEventListeners();
+                        console.log('Event Listeners removed')
+                        break;
+                    default:
+                        console.log('Unknown Command')
+                }
+            }
         })
     })
 
@@ -44,13 +66,14 @@ export default function Board({ opponent, socket }) {
             } else { console.log('That space is already occupied') }
         }) //Changes hover effect of square after is occupied
         document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].classList.replace('vacant', 'occupied')
+        removeEventListeners();
     }
 
     function setBoard() {
         placementArray.forEach((array, arrayIndex) => {
             array.forEach((square, squareIndex) => {
                 document.querySelector(`#${boardArray[arrayIndex]}`).childNodes[0].childNodes[squareIndex].innerHTML =
-                    square === 0 ? '' : square === 1 ? '<span class="markerO">O</span>' : '<span class="markerX">X</span>'
+                    square === 0 ? null : square === 1 ? '<span class="markerO">O</span>' : '<span class="markerX">X</span>'
             })
         })
     }
@@ -61,15 +84,16 @@ export default function Board({ opponent, socket }) {
                 placementArray = [...response.placementArray]
                 setBoard();
             });
+        removeEventListeners();
+        // addEventListeners();
         [...document.getElementsByClassName('childchild')].forEach(square => {
-            square.removeEventListener('click', registerClick, true)
-            square.addEventListener('click', registerClick, true);
             if (square.classList[2]) {
                 square.classList.replace('occupied', 'vacant')
             } else square.className += ' vacant';
         });
         //Removing Blur and big red symbol from every section
-        [...document.getElementsByClassName('win')].forEach((div) => div.style.display = 'none');
+        [...document.getElementsByClassName('winX')].forEach((div) => div.style.display = 'none');
+        [...document.getElementsByClassName('winO')].forEach((div) => div.style.display = 'none');
         [...document.getElementsByClassName('smallBoard-container')].forEach((smallBoard) => smallBoard.classList.remove('blur'));
         //Resetting the arrays to start
         excludeArray = [];
@@ -79,6 +103,18 @@ export default function Board({ opponent, socket }) {
         strikeThroughArr.forEach(item => {
             if (document.getElementById(item)) { document.getElementById(item).classList.remove('horizontal', 'vertical', 'diagonal-rtl', 'diagonal-ltr') }
         })
+    }
+
+    function removeEventListeners() {
+        [...document.getElementsByClassName('childchild')].forEach(square => {
+            square.removeEventListener('click', registerClick, true)
+        });
+    }
+
+    function addEventListeners() {
+        [...document.getElementsByClassName('childchild')].forEach(square => {
+            square.addEventListener('click', registerClick, true);
+        });
     }
 
     function checkSectionWin() {
@@ -211,7 +247,8 @@ export default function Board({ opponent, socket }) {
                 </div>
             ))}
             <button className='reset-button' onClick={() => {
-                socket.emit('redo')
+                socket.emit('getRooms')
+                console.log(socketId)
             }}> Test Button</button>
             <button className="reset-button" onClick={() => resetBoard()}>Reset Board</button>
         </div>
