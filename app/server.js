@@ -68,22 +68,6 @@ io.on('connection', (socket) => {
     })
 
 
-    // socket.on('requestPosition', (position, callback) => {
-    //     console.log(`Requesting placement at [${position.p1}][${position.p2}]`)
-    //     const { placementArray, wasPlaced } = checkAvailability(position)
-    //     // io.sockets.to(roomName).emit(currentPlayer, 'removeEventListeners')
-
-    //     callback({
-    //         placementArray, wasPlaced
-    //     })
-    // })
-
-
-
-
-
-
-
     function readyPlayer(roomName, currentPlayer) {
         //Add event listeners for the currentPlayer
         console.log('Running readyPlayer one ' + roomName + ',' + currentPlayer)
@@ -93,10 +77,6 @@ io.on('connection', (socket) => {
             currentPlayer,
             command: 'addEventListeners'
         })
-        //Wait for click event
-        //  Set the board
-        //Remove eventListeners
-
     }
 
     function startGame(room) {
@@ -119,7 +99,7 @@ io.on('connection', (socket) => {
 
 
         socket.on('requestPosition', (position, callback) => {
-            console.log(currentPlayer)
+            console.log(`Click registered by ${currentPlayer}`)
             console.log(`Requesting placement at [${position.p1}][${position.p2}]`)
             const { placementArray, wasPlaced } = checkAvailability(position)
 
@@ -131,7 +111,6 @@ io.on('connection', (socket) => {
                 } else {
                     currentPlayer = secondPlayer
                 }
-                console.log(currentPlayer)
                 readyPlayer(roomName, currentPlayer)
             } else {
                 console.log('calculating')

@@ -32,8 +32,6 @@ export default function Board({ opponent, socket }) {
         })
 
         socket.on('testBroadcast', (message) => {
-            console.log(message)
-            console.log(message.currentPlayer === socketId)
             if (message.currentPlayer === socketId) {
 
                 switch (message.command) {
@@ -53,20 +51,25 @@ export default function Board({ opponent, socket }) {
     })
 
     function registerClick(event) {
+        console.log(`Click Registereda at ${event.target.parentNode.parentNode.id},${event.target.id}`)
         socket.emit('requestPosition', {
             p1: boardArray.indexOf(event.target.parentNode.parentNode.id),
             p2: numberArray.indexOf(event.target.id),
             currentPlayer: isPlayer ? 2 : 1
         }, function onReturn(response) {
+            console.log('Callback recieved')
             placementArray = [...response.placementArray]
             setBoard();
             checkSectionWin();
             if (response.wasPlaced) {
                 isPlayer = !isPlayer
             } else { console.log('That space is already occupied') }
+            removeEventListeners();
+            console.log('Event Listeners Removed')
+            document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].classList.replace('vacant', 'occupied')
+
         }) //Changes hover effect of square after is occupied
-        document.getElementById(event.target.parentNode.parentNode.id).childNodes[0].childNodes[numberArray.indexOf(event.target.id)].classList.replace('vacant', 'occupied')
-        removeEventListeners();
+
     }
 
     function setBoard() {
