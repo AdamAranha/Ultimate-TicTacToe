@@ -25,10 +25,9 @@ if (process.env.ENV === 'production') {
 }
 
 io.on('connection', (socket) => {
-
+    socket.emit('starting')
     socket.emit('id', socket.id)
     console.log(`New User connected [${socket.id}]`)
-    gameLogic.newGame(socket.id)
 
     socketId = socket.id
 
@@ -43,9 +42,20 @@ io.on('connection', (socket) => {
         console.log(`User disconnected [${socket.id}]`)
     })
 
+    socket.on('startGame', (firstPlayer) => {
+
+        if (gameLogic.newGame(firstPlayer, socket.id)) {
+            if (firstPlayer === 'Player') {
+                socket.emit('command', {
+                    command: 'addEventListeners'
+                })
+            }
+        }
+
+    })
+
     socket.on('requestPosition', ({ position, user }) => {
         const gameBoard = gameLogic.requestPosition(position, user)
-
         io.sockets.to(socket.id).emit('gameBoard', gameBoard)
     })
 
@@ -55,7 +65,6 @@ io.on('connection', (socket) => {
 
     socket.on('resetBoard', (id) => {
         const gameBoard = gameLogic.resetBoard(id)
-
         io.sockets.to(socket.id).emit('gameBoard', gameBoard)
     })
 })
