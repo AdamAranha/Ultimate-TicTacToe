@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Container, Alert } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import './Header.css'
 import { ReactComponent as LogoShort } from './ttt-logo.svg'
 import { ReactComponent as LogoLong } from './ttt-logo-long.svg'
@@ -47,7 +46,6 @@ export default function Header({ socket }) {
 
     function startGame(firstPlayer) {
         if (firstPlayer) {
-            console.log(firstPlayer)
             socket.emit('startGame', firstPlayer)
         }
     }
