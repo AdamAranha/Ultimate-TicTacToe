@@ -43,15 +43,14 @@ io.on('connection', (socket) => {
     })
 
     socket.on('startGame', (firstPlayer) => {
-
-        if (gameLogic.newGame(firstPlayer, socket.id)) {
-            if (firstPlayer === 'Player') {
+        const { room, stored } = gameLogic.newGame(firstPlayer, socket.id)
+        if (stored) {
+            if (room.player1 != 'Program') {
                 socket.emit('command', {
                     command: 'addEventListeners'
                 })
             }
         }
-
     })
 
     socket.on('requestPosition', ({ position, user }) => {
