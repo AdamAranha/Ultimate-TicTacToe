@@ -3,11 +3,12 @@ let sectionArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 let roomList = [];
 
 class RoomData {
-    constructor(player1, player2 = '') {
+    constructor(room, player1, player2) {
         this.gameBoard = []
         for (let count = 0; count < 9; count++) {
             this.gameBoard[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         }
+        this.room = room
         this.player1 = player1
         this.player2 = player2
     }
@@ -34,24 +35,46 @@ class RoomData {
     }
 }
 
-function findRoom(room) {
-    return roomList.find(({ player1 }) => player1 === room)
+function findRoom(roomName) {
+    return roomList.find(({ room }) => room === roomName)
 }
+
 
 module.exports = {
 
-
-
-
-
-    newGame: function (player1) {
+    newGame: function (firstPlayer, id) {
+        let player1;
+        let player2;
         // console.log(`Player connected ${player1}`)
-        roomList.push(player1)
-        roomList[roomList.indexOf(player1)] = new RoomData(player1)
+
+        switch (firstPlayer) {
+            case 'Player':
+                player1 = id;
+                player2 = 'Program'
+                break;
+            case 'Program':
+                player1 = 'Program';
+                player2 = id;
+                break;
+            case 'Random':
+                let coinFlip = Math.round(Math.random());
+                if (coinFlip === 0) {
+                    player1 = id; player2 = 'Program'
+                } else {
+                    player1 = 'Program'; player2 = id
+                }
+                break;
+            default:
+                player1 = id;
+                player2 = 'Program'
+                break;
+        }
+        roomList.push(id)
+        roomList[roomList.indexOf(id)] = new RoomData(id, player1, player2)
+        if (findRoom(id)) return true
     },
 
     requestPosition: function (position, user) {
-
         return findRoom(user).setPosition(position)
     },
 
@@ -60,13 +83,6 @@ module.exports = {
     },
 
     callObject: function (id) {
-        // console.log(roomList)
-        // console.log(id + 'is a ' + typeof id)
-        // console.log(roomList[0].player1 + 'is a ' + typeof roomList[0].player1)
-        // console.log(roomList[0].player1 === id)
-        console.log(roomList.find(({ player1 }) => player1 === id).player1)
-
-
-        // return roomList[roomList.indexOf(id)]
+        console.log(findRoom(id).logPlayers())
     }
 }
