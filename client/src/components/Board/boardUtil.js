@@ -23,9 +23,21 @@ const boardUtil = {
         let gameBoard = [...board]
         gameBoard.forEach((section, sectionIndex) => {
             section.forEach((square, squareIndex) => {
-                document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).innerHTML =
-                    square === 0 ? null :
-                        square === 1 ? '<span class="markerX">X</span>' : '<span class="markerO">O</span>'
+
+                switch (square) {
+                    case 0:
+                        break;
+                    case 1:
+                        document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).innerHTML = '<span class="markerX">X</span>';
+                        document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).classList.replace('vacant', 'occupied');
+                        break;
+                    case 2:
+                        document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).innerHTML = '<span class="markerO">O</span>';
+                        document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).classList.replace('vacant', 'occupied');
+                        break;
+                    default:
+                        break;
+                }
             })
         })
     },
