@@ -25,21 +25,18 @@ if (process.env.ENV === 'production') {
 }
 
 io.on('connection', (socket) => {
-    socket.emit('starting')
-    socket.emit('id', socket.id)
+    socket.emit('starting');
+    socket.emit('id', socket.id);
     console.log(`+-------------------------------------------+\n| New User connected [${socket.id}] |`)
 
-    socketId = socket.id
+    socketId = socket.id;
 
     // socket.join('newRoom')
     // io.sockets.to(socket.id).emit('newMessage', 'WE DID IT!!')
     // console.log(io.sockets.adapter.rooms)
     // issocket.to(socket.id).emit('greeting', message)
-
-
-
     socket.on('disconnect', () => {
-        console.log(`| User disconnected  [${socket.id}] |\n+-------------------------------------------+`)
+        console.log(`|  User disconnected [${socket.id}] |\n+-------------------------------------------+`)
         gameLogic.removeRoom(socket.id);
     })
 
@@ -49,23 +46,28 @@ io.on('connection', (socket) => {
             if (room.player1 != 'Program') {
                 socket.emit('command', {
                     command: 'addEventListeners'
-                })
+                });
             }
         }
+        gameLogic.startGame(socket.id)
     })
 
-    socket.on('requestPosition', ({ position, user }) => {
-        const gameBoard = gameLogic.requestPosition(position, user)
-        io.sockets.to(socket.id).emit('gameBoard', gameBoard)
+    socket.on('requestPosition', ({ position, id }) => {
+        const gameBoard = gameLogic.requestPosition(position, id);
+        io.sockets.to(socket.id).emit('gameBoard', gameBoard);
     })
 
     socket.on('test-button', (id) => {
-        gameLogic.callObject(id)
+        const gameBoard = gameLogic.callObject(id);
+        io.sockets.to(socket.id).emit('gameBoard', gameBoard)
+        socket.emit('command', {
+            command: 'addEventListeners'
+        });
     })
 
     socket.on('resetBoard', (id) => {
-        const gameBoard = gameLogic.resetBoard(id)
-        io.sockets.to(socket.id).emit('gameBoard', gameBoard)
+        const gameBoard = gameLogic.resetBoard(id);
+        io.sockets.to(socket.id).emit('gameBoard', gameBoard);
     })
 })
 
