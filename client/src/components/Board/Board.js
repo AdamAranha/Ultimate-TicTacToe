@@ -42,7 +42,7 @@ export default function Board({ opponent, socket }) {
                 <div id={array} className={`${numberArray[index]}Thick child`} key={array}>
                     <div className="smallBoard-container">
                         {numberArray.map((square, index) => (
-                            <div id={array + '-' + realNumberArray[index]} className={`${square} childchild`} key={array + '-' + realNumberArray[index]}
+                            <div id={array + '-' + realNumberArray[index]} className={`${square} childchild vacant`} key={array + '-' + realNumberArray[index]}
                             // onClick={(event) => {
                             //     boardUtil.registerClick(event, socket)
                             // }}
