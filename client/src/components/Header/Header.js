@@ -55,7 +55,7 @@ export default function Header({ socket }) {
 
 
     return <>
-        <div className='header-container'>
+        <section className='header-container'>
             <div className='logo'>
                 <LogoLong className='header-logo-long' />
                 <LogoShort className='header-logo-short' onClick={() => console.log('Clicking on the SVG works')} />
@@ -65,7 +65,7 @@ export default function Header({ socket }) {
                 <div>Who do you want to go first?</div>
                 <button className='modal-options-button' onClick={() => { toggle(1); startGame('Player') }}>You</button>
                 <button className='modal-options-button' onClick={() => { toggle(1); startGame('Random') }}>Random</button>
-                <button className='modal-options-button' onClick={() => { toggle(1); startGame('Computer') }}>Computer</button>
+                <button className='modal-options-button' onClick={() => { toggle(1); startGame('Program') }}>Computer</button>
             </Modal>
 
             <Modal showModal={showModal_2} close={() => toggle(2)}>
@@ -77,13 +77,14 @@ export default function Header({ socket }) {
                 }}> FO SHO</button>
             </Modal>
 
-            <button className='header-changeGamemode' onClick={() => toggle(2)}>Change Gamemode</button>
+            <div className='header-fullscreen-gameOptions'>
+                <button className='header-changeGamemode' onClick={() => toggle(2)}>Change Gamemode</button>
+            </div>
 
             <div className='header-mobile-gameOptions'>
                 <HamburgerMenu className="header-hamburger-menu" onClick={() => toggle()} />
             </div>
-
-        </div>
+        </section>
 
     </>
 }
