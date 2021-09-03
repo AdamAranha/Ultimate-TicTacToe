@@ -7,14 +7,14 @@ class RoomData {
         this.gameBoard = []
         for (let count = 0; count < 9; count++) {
             this.gameBoard[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        }
-        this.room = room
-        this.player1 = player1
-        this.player2 = player2
+        };
+        this.room = room;
+        this.player1 = player1;
+        this.player2 = player2;
     }
 
     logPlayers() {
-        return (`Player 1:${this.player1}\nPlayer 2:${this.player2}`)
+        return (`Player 1:${this.player1}\nPlayer 2:${this.player2}`);
     }
 
     setPosition(position) {
@@ -22,21 +22,21 @@ class RoomData {
         const yCord = position[2];
 
         if (this.gameBoard[xCord][yCord] === 0) {
-            this.gameBoard[xCord][yCord] = 1
+            this.gameBoard[xCord][yCord] = 1;
         }
-        return (this.gameBoard)
+        return (this.gameBoard);
     }
 
     resetBoard() {
         for (let count = 0; count < 9; count++) {
-            this.gameBoard[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            this.gameBoard[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
         }
-        return this.gameBoard
+        return this.gameBoard;
     }
 }
 
 function findRoom(roomName) {
-    return roomList.find(({ room }) => room === roomName)
+    return roomList.find(({ room }) => room === roomName);
 }
 
 
@@ -59,30 +59,39 @@ module.exports = {
             case 'Random':
                 let coinFlip = Math.round(Math.random());
                 if (coinFlip === 0) {
-                    player1 = id; player2 = 'Program'
+                    player1 = id; player2 = 'Program';
                 } else {
-                    player1 = 'Program'; player2 = id
+                    player1 = 'Program'; player2 = id;
                 }
                 break;
             default:
                 player1 = id;
-                player2 = 'Program'
+                player2 = 'Program';
                 break;
         }
-        roomList.push(id)
-        roomList[roomList.indexOf(id)] = new RoomData(id, player1, player2)
-        if (findRoom(id)) return true
+        roomList.push(id);
+        roomList[roomList.indexOf(id)] = new RoomData(id, player1, player2);
+        if (findRoom(id)) return { room: findRoom(id), stored: true };
     },
 
     requestPosition: function (position, user) {
-        return findRoom(user).setPosition(position)
+        let newGameState = findRoom(user).setPosition(position);
+        let alternate = 0;
+
+        return newGameState
     },
 
     resetBoard: function (user) {
-        return findRoom(user).resetBoard()
+
+        return findRoom(user).resetBoard();
+    },
+
+
+    removeRoom: function (room) {
+        roomList.splice(roomList.indexOf(room), 1)
     },
 
     callObject: function (id) {
-        console.log(findRoom(id).logPlayers())
+        console.log(findRoom(id).logPlayers());
     }
 }
