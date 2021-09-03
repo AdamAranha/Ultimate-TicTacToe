@@ -1,17 +1,21 @@
 
 const sectionArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
-let gameBoard = [];
+let socket;
+
+
+function registerClick(event) {
+    console.log(event.target.id)
+    socket.emit('requestPosition', {
+        position: event.target.id,
+        user: socket.id
+    })
+    boardUtil.removeEventListeners()
+}
 
 
 const boardUtil = {
 
-    registerClick: function (event, socket) {
-        console.log(event.target.id)
-        socket.emit('requestPosition', {
-            position: event.target.id,
-            user: socket.id
-        })
-    },
+
 
     setBoard: function (board) {
         let gameBoard = [...board]
@@ -33,6 +37,20 @@ const boardUtil = {
             case 'G': return <div><div id="h-bot"></div></div>
             default: break;
         }
+    },
+
+    addEventListeners: function (tempSocket) {
+        socket = tempSocket;
+        [...document.getElementsByClassName('childchild')].forEach(square => {
+            square.addEventListener('click', registerClick, true);
+        });
+    },
+
+    removeEventListeners: function (tempSocket) {
+        socket = tempSocket;
+        [...document.getElementsByClassName('childchild')].forEach(square => {
+            square.removeEventListener('click', registerClick, true);
+        });
     }
 }
 
