@@ -144,7 +144,7 @@ module.exports = {
 
     callObject: function (id) {
         // console.log(findRoom(id).logPlayers());
-        findRoom(id).getTurn();
+        // findRoom(id).getTurn();
         // console.log(findRoom(id).currentPlayer)
         // console.log(findRoom(id).player1)
         let newGameState = this.compsTurn(id)
