@@ -3,18 +3,20 @@ const sectionArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
 let socket;
 
 
-function registerClick(event) {
-    console.log(event.target.id)
-    socket.emit('requestPosition', {
-        position: event.target.id,
-        user: socket.id
-    })
-    boardUtil.removeEventListeners()
-}
+
+
 
 
 const boardUtil = {
 
+    registerClick: function (event) {
+        console.log(event.target.id)
+        socket.emit('requestPosition', {
+            position: event.target.id,
+            id: socket.id
+        })
+        boardUtil.removeEventListeners()
+    },
 
 
     setBoard: function (board) {
@@ -23,7 +25,7 @@ const boardUtil = {
             section.forEach((square, squareIndex) => {
                 document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).innerHTML =
                     square === 0 ? null :
-                        square === 1 ? '<span class="markerO">X</span>' : '<span class="markerX">O</span>'
+                        square === 1 ? '<span class="markerX">X</span>' : '<span class="markerO">O</span>'
             })
         })
     },
@@ -42,14 +44,14 @@ const boardUtil = {
     addEventListeners: function (tempSocket) {
         socket = tempSocket;
         [...document.getElementsByClassName('childchild')].forEach(square => {
-            square.addEventListener('click', registerClick, true);
+            square.addEventListener('click', boardUtil.registerClick, true);
         });
     },
 
     removeEventListeners: function (tempSocket) {
         socket = tempSocket;
         [...document.getElementsByClassName('childchild')].forEach(square => {
-            square.removeEventListener('click', registerClick, true);
+            square.removeEventListener('click', boardUtil.registerClick, true);
         });
     }
 }
