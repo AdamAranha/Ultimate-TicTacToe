@@ -27,7 +27,7 @@ if (process.env.ENV === 'production') {
 io.on('connection', (socket) => {
     socket.emit('starting')
     socket.emit('id', socket.id)
-    console.log(`New User connected [${socket.id}]`)
+    console.log(`+-------------------------------------------+\n| New User connected [${socket.id}] |`)
 
     socketId = socket.id
 
@@ -39,7 +39,8 @@ io.on('connection', (socket) => {
 
 
     socket.on('disconnect', () => {
-        console.log(`User disconnected [${socket.id}]`)
+        console.log(`| User disconnected  [${socket.id}] |\n+-------------------------------------------+`)
+        gameLogic.removeRoom(socket.id);
     })
 
     socket.on('startGame', (firstPlayer) => {
