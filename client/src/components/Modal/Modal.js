@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import './Modal.css'
 
-export default function Modal({ modalSetting, challenger, message, show, close, showOpponent, avoid1, avoid2, socket }) {
+export default function Modal({ children, showModal, close }) {
 
     const modelRef = useRef()
 
     useEffect(() => {
         function handleClick(event) {
-            if (modelRef.current && !modelRef.current.contains(event.target) && !avoid1.current.contains(event.target) && !avoid2.current.contains(event.target)) {
+            if (modelRef.current && !modelRef.current.contains(event.target)) {
                 close()
             }
         }
@@ -23,38 +23,14 @@ export default function Modal({ modalSetting, challenger, message, show, close, 
 
     return <>
         {
-            show ?
+            showModal ?
                 <div>
                     <div className='modal-dimScreen'></div>
-                    <div className='modal-container' ref={modelRef}>
-                        {modalSetting === 'gamemode' ?
-                            <div>
-                                <p className='modal-text'>{message}</p>
-                                <div className='modal-buttonGroup'>
-                                    <button className='button' onClick={() => {
-                                        socket.emit('redo')
-                                        close()
-                                        showOpponent()
-                                    }}>Ok</button>
-                                    <button className='button' onClick={() => close()}>Cancel</button>
-                                </div>
-                            </div>
-                            :
-                            <div>
-                                <p className='modal-text'>Accept Challenge from {challenger}?</p>
-                                <div className='modal-buttonGroup'>
-                                    <button className='button' onClick={() => {
-                                        socket.emit('challengeAccepted', { challenger: challenger, user: socket.id })
-                                        close()
-                                    }}>Accept</button>
-                                    <button className='button' onClick={() => close()}>Cancel</button>
-                                </div>
-                            </div>
-                        }
-
-
+                    <div className='modal-container title' ref={modelRef}>
+                        {children}
                     </div>
                 </div>
+
 
                 : null}
     </>
