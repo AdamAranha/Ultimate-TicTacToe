@@ -79,9 +79,18 @@
         transform: translate(-50%, -50%);
     
         height: 150px;
-        width: 300px;
+        width: 350px;
         background-color:white;
         border: 2px solid black;
+    }
+
+    .modal-options-button{
+        all:unset;
+        border: 1px solid black;
+        height: 75px;
+        width: 75px;
+        margin: 10px;
+        border-radius: 5px;
     }
 
     .modal-buttonGroup{
