@@ -20,8 +20,19 @@ export default function Board({ opponent, socket }) {
 
         socket.on('gameBoard', (board) => {
 
-            console.table(board)
+            // console.table(board)
             boardUtil.setBoard(board)
+        })
+
+        socket.on('command', (command) => {
+            console.log(command)
+            switch (command.command) {
+                case 'addEventListeners':
+                    boardUtil.addEventListeners(socket);
+                    break;
+                default:
+                    break;
+            }
         })
     })
 
@@ -32,9 +43,10 @@ export default function Board({ opponent, socket }) {
                     <div className="smallBoard-container">
                         {numberArray.map((square, index) => (
                             <div id={array + '-' + realNumberArray[index]} className={`${square} childchild`} key={array + '-' + realNumberArray[index]}
-                                onClick={(event) => {
-                                    boardUtil.registerClick(event, socket)
-                                }}></div>
+                            // onClick={(event) => {
+                            //     boardUtil.registerClick(event, socket)
+                            // }}
+                            ></div>
                         ))}
                     </div>
                     {/* Win Stuff */}
@@ -49,6 +61,7 @@ export default function Board({ opponent, socket }) {
                 </div>
             ))}
             <button className='reset-button' onClick={() => {
+                socket.emit('test-button', socketId)
             }}> Test Button</button>
             <button className="reset-button" onClick={() => {
                 socket.emit('resetBoard', socketId)
