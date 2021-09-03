@@ -19,12 +19,12 @@ export default function Header({ socket }) {
     const avoidRef2 = useRef();
 
     useEffect(() => {
-        socket.on('joinRequest', (value) => {
-            setModalSetting('joinRequest')
-            console.log('Challenge issued')
-            setChallenger(value)
-            toggle()
-        })
+        // socket.on('joinRequest', (value) => {
+        //     setModalSetting('joinRequest')
+        //     console.log('Challenge issued')
+        //     setChallenger(value)
+        //     toggle()
+        // })
     })
 
     function toggle() {
@@ -59,13 +59,13 @@ export default function Header({ socket }) {
                 {opponent === 'User' ?
                     <div className='header-userOptions'>
                         <div className='header-id'>
-                            ID:{socket.id}
+                            {/* ID:{socket.id} */}
                         </div>
                         <form className='header-search'>
                             <input type='text' className='header-searchInput' value={searchUser} onChange={(event) => handleChange(event)} placeholder='Search for a friend'></input>
                             <button className='header-searchButton' onClick={(event) => {
                                 event.preventDefault()
-                                socket.emit('searchUser', searchUser)
+                                // socket.emit('searchUser', searchUser)
                             }}>Search</button>
                         </form>
                     </div>
