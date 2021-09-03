@@ -26,6 +26,8 @@ const boardUtil = {
 
                 switch (square) {
                     case 0:
+                        document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).innerHTML = ''
+                        document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).classList.replace('occupied', 'vacant');
                         break;
                     case 1:
                         document.querySelector(`#${sectionArray[sectionIndex]}-${squareIndex}`).innerHTML = '<span class="markerX">X</span>';
