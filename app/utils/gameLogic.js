@@ -11,6 +11,8 @@ class RoomData {
         this.room = room;
         this.player1 = player1;
         this.player2 = player2;
+        this.currentPlayer = player1;
+        this.turn = 1;
     }
 
     logPlayers() {
@@ -21,10 +23,30 @@ class RoomData {
         const xCord = sectionArray.indexOf(position[0]);
         const yCord = position[2];
 
+        this.getTurn();
+
         if (this.gameBoard[xCord][yCord] === 0) {
-            this.gameBoard[xCord][yCord] = 1;
+
+            if (this.currentPlayer === this.player1) {
+                this.gameBoard[xCord][yCord] = 1;
+            } else { this.gameBoard[xCord][yCord] = 2; }
+
+            // this.gameBoard[xCord][yCord] = 1;
         }
         return (this.gameBoard);
+    }
+
+    increaseTurn() {
+        this.turn++;
+    }
+
+    getTurn() {
+        if (this.turn % 2 === 1) this.currentPlayer = this.player1
+        else this.currentPlayer = this.player2
+
+        console.log(`We are on turn ${this.turn}, it is currently ${this.currentPlayer}'s turn`);
+
+        return this.currentPlayer
     }
 
     resetBoard() {
@@ -71,19 +93,48 @@ module.exports = {
         }
         roomList.push(id);
         roomList[roomList.indexOf(id)] = new RoomData(id, player1, player2);
+
         if (findRoom(id)) return { room: findRoom(id), stored: true };
     },
 
-    requestPosition: function (position, user) {
-        let newGameState = findRoom(user).setPosition(position);
-        let alternate = 0;
+    startGame: function (id) {
+
+        // if (findRoom(id).getTurn() === 'Program') {
+        //     return
+        // }
+    },
+
+    compsTurn: function (id) {
+
+        // let freeArray = [...findRoom(id).gameBoard]
+
+        let freeArray = [];
+        [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
+            section.forEach((square, squareIndex) => {
+                if (square === 0) {
+                    freeArray.push(`${sectionArray[sectionIndex]}-${squareIndex}`)
+                }
+            })
+        })
+        let randomFreeSquare = freeArray[Math.floor(Math.random() * freeArray.length)]
+
+
+
+        // if (freeArray) console.log(freeArray)
+        let newGameState = this.requestPosition(randomFreeSquare, id)
+        return newGameState
+
+    },
+
+    requestPosition: function (position, id) {
+        let newGameState = findRoom(id).setPosition(position);
+        findRoom(id).increaseTurn();
 
         return newGameState
     },
 
-    resetBoard: function (user) {
-
-        return findRoom(user).resetBoard();
+    resetBoard: function (id) {
+        return findRoom(id).resetBoard();
     },
 
 
@@ -92,6 +143,11 @@ module.exports = {
     },
 
     callObject: function (id) {
-        console.log(findRoom(id).logPlayers());
+        // console.log(findRoom(id).logPlayers());
+        findRoom(id).getTurn();
+        // console.log(findRoom(id).currentPlayer)
+        // console.log(findRoom(id).player1)
+        let newGameState = this.compsTurn(id)
+        return newGameState
     }
 }
