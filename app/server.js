@@ -1,4 +1,4 @@
-const { checkAvailability, resetBoard } = require('./utils/boardFunc.js')
+const gameLogic = require('./utils/gameLogic.js')
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000
 // const STATIC_PATH = process.env.ENV === 'production' ? path.join(__dirname, '../client/build') : path.join(__dirname, '../client/public')
 const message = 'Greetings!'
 
+
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 if (process.env.ENV === 'production') {
@@ -24,10 +25,15 @@ if (process.env.ENV === 'production') {
 }
 
 io.on('connection', (socket) => {
+
     socket.emit('id', socket.id)
     console.log(`New User connected [${socket.id}]`)
+    gameLogic.newGame(socket.id)
+
+    socketId = socket.id
+
     // socket.join('newRoom')
-    io.sockets.to(socket.id).emit('newMessage', 'WE DID IT!!')
+    // io.sockets.to(socket.id).emit('newMessage', 'WE DID IT!!')
     // console.log(io.sockets.adapter.rooms)
     // issocket.to(socket.id).emit('greeting', message)
 
@@ -37,8 +43,20 @@ io.on('connection', (socket) => {
         console.log(`User disconnected [${socket.id}]`)
     })
 
-    socket.on('surpriseBitch', (message) => {
-        console.log(message)
+    socket.on('requestPosition', ({ position, user }) => {
+        const gameBoard = gameLogic.requestPosition(position, user)
+
+        io.sockets.to(socket.id).emit('gameBoard', gameBoard)
+    })
+
+    socket.on('test-button', (id) => {
+        gameLogic.callObject(id)
+    })
+
+    socket.on('resetBoard', (id) => {
+        const gameBoard = gameLogic.resetBoard(id)
+
+        io.sockets.to(socket.id).emit('gameBoard', gameBoard)
     })
 })
 
