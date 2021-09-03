@@ -11,7 +11,6 @@ import Modal from '../Modal/Modal.js'
 export default function Header({ socket }) {
 
     const [opponent, setOpponent] = useState('Program')
-    const [firstPlayer, setFirstPlayer] = useState(null)
     const [showModal_1, setShowModal_1] = useState(false)
     const [showModal_2, setShowModal_2] = useState(false)
 
@@ -47,7 +46,6 @@ export default function Header({ socket }) {
     }
 
     function startGame(firstPlayer) {
-        setFirstPlayer(firstPlayer);
         if (firstPlayer) {
             console.log(firstPlayer)
             socket.emit('startGame', firstPlayer)
