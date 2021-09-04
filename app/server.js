@@ -50,11 +50,31 @@ io.on('connection', (socket) => {
             }
         }
         gameLogic.startGame(socket.id)
+        if (room.player1 === 'Program') {
+            setTimeout(() => {
+                newBoardState = gameLogic.compsTurn(socket.id)
+                io.sockets.to(socket.id).emit('gameBoard', newBoardState)
+                socket.emit('command', {
+                    command: 'addEventListeners'
+                });
+            }, 1100);
+        }
     })
 
     socket.on('requestPosition', ({ position, id }, callback) => {
-        const { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);;
+        let { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);;
         io.sockets.to(socket.id).emit('gameBoard', newBoardState);
+
+        // Then i set a timeout, get the AI position, and send it back
+        if (wasPlaced) {
+            setTimeout(() => {
+                newBoardState = gameLogic.compsTurn(id)
+                io.sockets.to(socket.id).emit('gameBoard', newBoardState)
+                socket.emit('command', {
+                    command: 'addEventListeners'
+                });
+            }, 1100);
+        }
 
         callback({
             wasPlaced
@@ -62,11 +82,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('test-button', (id) => {
-        const gameBoard = gameLogic.callObject(id);
-        io.sockets.to(socket.id).emit('gameBoard', gameBoard)
-        socket.emit('command', {
-            command: 'addEventListeners'
-        });
+        gameLogic.callObject();
     })
 
     socket.on('resetBoard', (id) => {
