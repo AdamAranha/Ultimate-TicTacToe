@@ -18,14 +18,18 @@ export default function Board({ opponent, socket }) {
             console.log(`Your Socket ID is: ${id}`)
         })
 
-        socket.on('gameBoard', (board) => {
+        socket.on('winner', ({ winCondition }) => {
+            console.log(winCondition)
+        })
 
-            // console.table(board)
-            boardUtil.setBoard(board)
+        socket.on('gameBoard', (boardData) => {
+            const { newBoardState, winArray, winCondition, overBoardWin } = boardData;
+            // if (overBoardWin) console.log(winCondition)
+            boardUtil.setBoard(boardData)
         })
 
         socket.on('command', (command) => {
-            console.log(command)
+            // console.log(command)
             switch (command.command) {
                 case 'addEventListeners':
                     boardUtil.addEventListeners(socket);
