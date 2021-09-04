@@ -8,11 +8,65 @@ class RoomData {
         for (let count = 0; count < 9; count++) {
             this.gameBoard[count] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
         };
+        this.turn = 1;
         this.room = room;
+        this.winArray = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.excludeArray = [];
         this.player1 = player1;
         this.player2 = player2;
+        this.overBoardWin = false;
+        this.winCondition = 'none';
         this.currentPlayer = player1;
-        this.turn = 1;
+    }
+
+    checkForWin(array) {
+        let currentPlayerMarker = this.currentPlayer === this.player1 ? 1 : 2
+        let didWin = false;
+        function shortCut(num1, num2, num3) {
+            return (
+                array[num1] === currentPlayerMarker &&
+                array[num2] === currentPlayerMarker &&
+                array[num3] === currentPlayerMarker
+            )
+        }
+
+        if (shortCut(0, 1, 2)) { didWin = true; this.windCondition = 'h-top' }
+        if (shortCut(3, 4, 5)) { didWin = true; this.windCondition = 'h-mid' }
+        if (shortCut(6, 7, 8)) { didWin = true; this.windCondition = 'h-bot' }
+
+        if (shortCut(0, 3, 6)) { didWin = true; this.windCondition = 'v-left' }
+        if (shortCut(1, 4, 7)) { didWin = true; this.windCondition = 'v-mid' }
+        if (shortCut(2, 5, 8)) { didWin = true; this.windCondition = 'v-right' }
+
+        if (shortCut(0, 4, 8)) { didWin = true; this.windCondition = 'd-ltr' }
+        if (shortCut(2, 4, 6)) { didWin = true; this.windCondition = 'd-rtl' }
+        // console.log(sectionWon, winCondition) 
+        return didWin;
+    }
+
+    checkForSectionWin() {
+        let currentPlayerMarker = this.currentPlayer === this.player1 ? 1 : 2
+        let sectionWon = false;
+        this.gameBoard.forEach((section, sectionIndex) => {
+
+            if (this.excludeArray.includes(sectionIndex)) return;
+            if (this.checkForWin(section)) {
+                this.winArray[sectionIndex] = currentPlayerMarker;
+                // console.log(`Section[${sectionIndex}] has been won`)
+                this.excludeArray.push(sectionIndex);
+            }
+        })
+        this.checkOveralWin();
+
+        return {
+            winArray: this.winArray,
+            winCondition: this.winCondition,
+            overBoardWin: this.overBoardWin
+        }
+    }
+
+    checkOveralWin() {
+        if (this.checkForWin(this.winArray)) this.overBoardWin = true;
     }
 
     logPlayers() {
@@ -31,17 +85,14 @@ class RoomData {
             wasPlaced = true;
             if (this.currentPlayer === this.player1) {
                 this.gameBoard[xCord][yCord] = 1;
-            } else { this.gameBoard[xCord][yCord] = 2; }
 
-            // this.gameBoard[xCord][yCord] = 1;
+            } else { this.gameBoard[xCord][yCord] = 2; }
+            this.turn++;
+            // this.checkForSectionWin()
         } else {
             wasPlaced = false;
         }
         return { newBoardState: this.gameBoard, wasPlaced };
-    }
-
-    increaseTurn() {
-        this.turn++;
     }
 
     getTurn() {
@@ -63,13 +114,14 @@ function findRoom(roomName) {
     return roomList.find(({ room }) => room === roomName);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
 
     newGame: function (firstPlayer, id) {
         let player1;
         let player2;
-        // console.log(`Player connected ${player1}`)
 
         switch (firstPlayer) {
             case 'Player':
@@ -99,15 +151,11 @@ module.exports = {
         if (findRoom(id)) return { room: findRoom(id), stored: true };
     },
 
-    startGame: function (id) {
-
-        // if (findRoom(id).getTurn() === 'Program') {
-        //     return
-        // }
+    checkForSectionWin: function (id) {
+        return findRoom(id).checkForSectionWin();
     },
 
     compsTurn: function (id) {
-
         let freeArray = [];
         [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
             section.forEach((square, squareIndex) => {
@@ -117,14 +165,13 @@ module.exports = {
             })
         })
         let randomFreeSquare = freeArray[Math.floor(Math.random() * freeArray.length)]
-        const { newBoardState, wasPlaced } = this.requestPosition(randomFreeSquare, id)
+        // const { newBoardState, wasPlaced } = this.requestPosition(randomFreeSquare, id)
 
-        return newBoardState
+        return this.requestPosition(randomFreeSquare, id).newBoardState
     },
 
     requestPosition: function (position, id) {
         const { newBoardState, wasPlaced } = findRoom(id).setPosition(position);
-        wasPlaced ? findRoom(id).increaseTurn() : null;
 
         return { newBoardState, wasPlaced };
     },
