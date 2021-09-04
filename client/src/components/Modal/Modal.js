@@ -1,22 +1,24 @@
 import React, { useEffect, useRef } from 'react';
 import './Modal.css'
 
-export default function Modal({ children, showModal, close }) {
+export default function Modal({ children, showModal, close, quickClose }) {
 
     const modelRef = useRef()
 
     useEffect(() => {
-        function handleClick(event) {
-            if (modelRef.current && !modelRef.current.contains(event.target)) {
-                close()
+        if (quickClose) {
+            function handleClick(event) {
+                if (modelRef.current && !modelRef.current.contains(event.target)) {
+                    close()
+                }
             }
+            // add when mounted
+            document.addEventListener("mousedown", handleClick);
+            // return function to be called when unmounted
+            return () => {
+                document.removeEventListener("mousedown", handleClick);
+            };
         }
-        // add when mounted
-        document.addEventListener("mousedown", handleClick);
-        // return function to be called when unmounted
-        return () => {
-            document.removeEventListener("mousedown", handleClick);
-        };
     })
 
 
