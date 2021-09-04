@@ -51,11 +51,31 @@ const boardUtil = {
             if (excludeArray.includes(sectionIndex)) return;
             if (section !== 0) {
                 document.querySelector(`#${sectionArray[sectionIndex]}`).childNodes[0].className += ' blur';
-                document.querySelector(`#${sectionArray[sectionIndex]}`).childNodes[section].style.display = 'flex'
-                excludeArray.push(sectionIndex)
+                document.querySelector(`#${sectionArray[sectionIndex]}`).childNodes[section].style.display = 'flex';
+                for (let count = 0; count < 9; count++) {
+                    document.getElementById(`${sectionArray[sectionIndex]}-${count}`).classList.remove('vacant', 'occupied');
+                    document.getElementById(`${sectionArray[sectionIndex]}-${count}`).removeEventListener('click', boardUtil.registerClick, true);
+                }
+
+                excludeArray.push(sectionIndex);
             }
         })
-        if (overBoardWin) console.log(winCondition)
+        if (overBoardWin) {
+            console.log(winCondition)
+            let location = document.getElementById(winCondition)
+            switch (winCondition[0]) {
+                case 'h': location.className = 'horizontal'
+                    break;
+                case 'v': location.className = 'vertical'
+                    break;
+                case 'd': if (winCondition === 'd-rtl') {
+                    location.className = 'diagonal-rtl'
+                } else {
+                    location.className = 'diagonal-ltr'
+                } break;
+                default: break;
+            }
+        }
     },
 
     strikeThrough: function (array) {
@@ -72,6 +92,7 @@ const boardUtil = {
     addEventListeners: function (tempSocket) {
         socket = tempSocket;
         [...document.getElementsByClassName('childchild')].forEach(square => {
+            if (excludeArray.includes(sectionArray.indexOf(square.id[0]))) return;
             square.addEventListener('click', boardUtil.registerClick, true);
         });
     },
