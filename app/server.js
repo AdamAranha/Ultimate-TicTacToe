@@ -52,9 +52,13 @@ io.on('connection', (socket) => {
         gameLogic.startGame(socket.id)
     })
 
-    socket.on('requestPosition', ({ position, id }) => {
-        const gameBoard = gameLogic.requestPosition(position, id);
-        io.sockets.to(socket.id).emit('gameBoard', gameBoard);
+    socket.on('requestPosition', ({ position, id }, callback) => {
+        const { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);;
+        io.sockets.to(socket.id).emit('gameBoard', newBoardState);
+
+        callback({
+            wasPlaced
+        })
     })
 
     socket.on('test-button', (id) => {
