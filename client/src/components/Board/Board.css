@@ -238,12 +238,27 @@
         color: blue;
     }
 
-    .win{
+    .winX{
         position: absolute;
         height: 120px;
         width: 120px;
         font-size: 110px;
         color: #ff3a3a;
+        line-height: 70%;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        animation: fadeIn 1s;
+        margin-top: 10px;
+    }
+
+    .winO{
+        position: absolute;
+        height: 120px;
+        width: 120px;
+        font-size: 110px;
+        color: blue;
         line-height: 70%;
         display: none;
         justify-content: center;
