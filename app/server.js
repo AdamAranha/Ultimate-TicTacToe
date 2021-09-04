@@ -49,11 +49,14 @@ io.on('connection', (socket) => {
                 });
             }
         }
-        gameLogic.startGame(socket.id)
+        // gameLogic.startGame(socket.id)
         if (room.player1 === 'Program') {
             setTimeout(() => {
-                newBoardState = gameLogic.compsTurn(socket.id)
-                io.sockets.to(socket.id).emit('gameBoard', newBoardState)
+                const newBoardState = gameLogic.compsTurn(socket.id);
+                const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(socket.id);
+                const boardData = { newBoardState, winArray, overBoardWin, winCondition };
+
+                io.sockets.to(socket.id).emit('gameBoard', boardData);
                 socket.emit('command', {
                     command: 'addEventListeners'
                 });
@@ -62,14 +65,18 @@ io.on('connection', (socket) => {
     })
 
     socket.on('requestPosition', ({ position, id }, callback) => {
-        let { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);;
-        io.sockets.to(socket.id).emit('gameBoard', newBoardState);
+        const { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);;
+        const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(id);
+        const boardData = { newBoardState, winArray, overBoardWin, winCondition }
+        io.sockets.to(socket.id).emit('gameBoard', boardData);
 
         // Then i set a timeout, get the AI position, and send it back
         if (wasPlaced) {
             setTimeout(() => {
-                newBoardState = gameLogic.compsTurn(id)
-                io.sockets.to(socket.id).emit('gameBoard', newBoardState)
+                const newBoardState = gameLogic.compsTurn(id);
+                const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(id);
+                const boardData = { newBoardState, winArray, overBoardWin, winCondition };
+                io.sockets.to(socket.id).emit('gameBoard', boardData);
                 socket.emit('command', {
                     command: 'addEventListeners'
                 });
