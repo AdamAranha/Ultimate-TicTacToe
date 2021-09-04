@@ -14,8 +14,12 @@ const boardUtil = {
         socket.emit('requestPosition', {
             position: event.target.id,
             id: socket.id
-        })
-        boardUtil.removeEventListeners()
+        },
+            function onResponse({ wasPlaced }) {
+                console.log(wasPlaced)
+                if (wasPlaced) { boardUtil.removeEventListeners() }
+            })
+
     },
 
 
