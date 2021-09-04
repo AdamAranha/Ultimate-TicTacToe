@@ -30,16 +30,16 @@ class RoomData {
             )
         }
 
-        if (shortCut(0, 1, 2)) { didWin = true; this.windCondition = 'h-top' }
-        if (shortCut(3, 4, 5)) { didWin = true; this.windCondition = 'h-mid' }
-        if (shortCut(6, 7, 8)) { didWin = true; this.windCondition = 'h-bot' }
+        if (shortCut(0, 1, 2)) { didWin = true; this.winCondition = 'h-top' }
+        if (shortCut(3, 4, 5)) { didWin = true; this.winCondition = 'h-mid' }
+        if (shortCut(6, 7, 8)) { didWin = true; this.winCondition = 'h-bot' }
 
-        if (shortCut(0, 3, 6)) { didWin = true; this.windCondition = 'v-left' }
-        if (shortCut(1, 4, 7)) { didWin = true; this.windCondition = 'v-mid' }
-        if (shortCut(2, 5, 8)) { didWin = true; this.windCondition = 'v-right' }
+        if (shortCut(0, 3, 6)) { didWin = true; this.winCondition = 'v-left' }
+        if (shortCut(1, 4, 7)) { didWin = true; this.winCondition = 'v-mid' }
+        if (shortCut(2, 5, 8)) { didWin = true; this.winCondition = 'v-right' }
 
-        if (shortCut(0, 4, 8)) { didWin = true; this.windCondition = 'd-ltr' }
-        if (shortCut(2, 4, 6)) { didWin = true; this.windCondition = 'd-rtl' }
+        if (shortCut(0, 4, 8)) { didWin = true; this.winCondition = 'd-ltr' }
+        if (shortCut(2, 4, 6)) { didWin = true; this.winCondition = 'd-rtl' }
         // console.log(sectionWon, winCondition) 
         return didWin;
     }
