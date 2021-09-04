@@ -59,14 +59,14 @@ export default function Header({ socket }) {
                 <LogoShort className='header-logo-short' onClick={() => console.log('Clicking on the SVG works')} />
                 <h2 id='opponent-text'>{opponent}</h2>
             </div>
-            <Modal showModal={showModal_1} close={() => toggle(1)}>
+            <Modal showModal={showModal_1} close={() => toggle(1)} quickClose={false}>
                 <div>Who do you want to go first?</div>
                 <button className='modal-options-button' onClick={() => { toggle(1); startGame('Player') }}>You</button>
                 <button className='modal-options-button' onClick={() => { toggle(1); startGame('Random') }}>Random</button>
                 <button className='modal-options-button' onClick={() => { toggle(1); startGame('Program') }}>Computer</button>
             </Modal>
 
-            <Modal showModal={showModal_2} close={() => toggle(2)}>
+            <Modal showModal={showModal_2} close={() => toggle(2)} quickClose={true}>
                 <p>Are you sure about that?</p>
                 <button className='reset-button' onClick={() => toggle(2)}> NAH DAWG</button>
                 <button className='reset-button' onClick={() => {
@@ -80,7 +80,7 @@ export default function Header({ socket }) {
             </div>
 
             <div className='header-mobile-gameOptions'>
-                <HamburgerMenu className="header-hamburger-menu" onClick={() => toggle()} />
+                <HamburgerMenu className="header-hamburger-menu" onClick={() => toggle(2)} />
             </div>
         </section>
 
