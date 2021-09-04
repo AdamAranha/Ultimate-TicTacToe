@@ -20,6 +20,7 @@ class RoomData {
     }
 
     setPosition(position) {
+        let wasPlaced;
         const xCord = sectionArray.indexOf(position[0]);
         const yCord = position[2];
 
@@ -27,13 +28,16 @@ class RoomData {
 
         if (this.gameBoard[xCord][yCord] === 0) {
 
+            wasPlaced = true;
             if (this.currentPlayer === this.player1) {
                 this.gameBoard[xCord][yCord] = 1;
             } else { this.gameBoard[xCord][yCord] = 2; }
 
             // this.gameBoard[xCord][yCord] = 1;
+        } else {
+            wasPlaced = false;
         }
-        return (this.gameBoard);
+        return { newBoardState: this.gameBoard, wasPlaced };
     }
 
     increaseTurn() {
@@ -121,16 +125,18 @@ module.exports = {
 
 
         // if (freeArray) console.log(freeArray)
-        let newGameState = this.requestPosition(randomFreeSquare, id)
-        return newGameState
+        const { newBoardState, wasPlaced } = this.requestPosition(randomFreeSquare, id)
+
+        return newBoardState
 
     },
 
     requestPosition: function (position, id) {
-        let newGameState = findRoom(id).setPosition(position);
-        findRoom(id).increaseTurn();
 
-        return newGameState
+        const { newBoardState, wasPlaced } = findRoom(id).setPosition(position);
+        wasPlaced ? findRoom(id).increaseTurn() : null;
+
+        return { newBoardState, wasPlaced };
     },
 
     resetBoard: function (id) {
@@ -147,7 +153,7 @@ module.exports = {
         // findRoom(id).getTurn();
         // console.log(findRoom(id).currentPlayer)
         // console.log(findRoom(id).player1)
-        let newGameState = this.compsTurn(id)
-        return newGameState
+        let newBoardState = this.compsTurn(id)
+        return newBoardState
     }
 }
