@@ -1,7 +1,7 @@
 
 const sectionArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
 let socket;
-
+let excludeArray = [];
 
 
 
@@ -23,9 +23,10 @@ const boardUtil = {
     },
 
 
-    setBoard: function (board) {
-        let gameBoard = [...board]
-        gameBoard.forEach((section, sectionIndex) => {
+    setBoard: function (boardData) {
+        const { newBoardState, overBoardWin, winCondition } = boardData
+        // let gameBoard = [...boardData.newBoardState];
+        newBoardState.forEach((section, sectionIndex) => {
             section.forEach((square, squareIndex) => {
 
                 switch (square) {
@@ -46,6 +47,15 @@ const boardUtil = {
                 }
             })
         })
+        boardData.winArray.forEach((section, sectionIndex) => {
+            if (excludeArray.includes(sectionIndex)) return;
+            if (section !== 0) {
+                document.querySelector(`#${sectionArray[sectionIndex]}`).childNodes[0].className += ' blur';
+                document.querySelector(`#${sectionArray[sectionIndex]}`).childNodes[section].style.display = 'flex'
+                excludeArray.push(sectionIndex)
+            }
+        })
+        if (overBoardWin) console.log(winCondition)
     },
 
     strikeThrough: function (array) {
