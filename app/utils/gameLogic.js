@@ -158,6 +158,7 @@ module.exports = {
     compsTurn: function (id) {
         let freeArray = [];
         [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
+            if (findRoom(id).excludeArray.includes(sectionIndex)) return;
             section.forEach((square, squareIndex) => {
                 if (square === 0) {
                     freeArray.push(`${sectionArray[sectionIndex]}-${squareIndex}`)
