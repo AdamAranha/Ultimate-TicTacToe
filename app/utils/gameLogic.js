@@ -45,10 +45,8 @@ class RoomData {
     }
 
     getTurn() {
-        if (this.turn % 2 === 1) this.currentPlayer = this.player1
-        else this.currentPlayer = this.player2
-
-        console.log(`We are on turn ${this.turn}, it is currently ${this.currentPlayer}'s turn`);
+        this.turn % 2 === 1 ? this.currentPlayer = this.player1 : this.currentPlayer = this.player2;
+        console.log(`We are on turn ${this.turn + 1}, it is currently ${this.currentPlayer === this.player1 ? this.player2 : this.player1}'s turn`);
 
         return this.currentPlayer
     }
@@ -110,8 +108,6 @@ module.exports = {
 
     compsTurn: function (id) {
 
-        // let freeArray = [...findRoom(id).gameBoard]
-
         let freeArray = [];
         [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
             section.forEach((square, squareIndex) => {
@@ -121,18 +117,12 @@ module.exports = {
             })
         })
         let randomFreeSquare = freeArray[Math.floor(Math.random() * freeArray.length)]
-
-
-
-        // if (freeArray) console.log(freeArray)
         const { newBoardState, wasPlaced } = this.requestPosition(randomFreeSquare, id)
 
         return newBoardState
-
     },
 
     requestPosition: function (position, id) {
-
         const { newBoardState, wasPlaced } = findRoom(id).setPosition(position);
         wasPlaced ? findRoom(id).increaseTurn() : null;
 
@@ -153,7 +143,7 @@ module.exports = {
         // findRoom(id).getTurn();
         // console.log(findRoom(id).currentPlayer)
         // console.log(findRoom(id).player1)
-        let newBoardState = this.compsTurn(id)
-        return newBoardState
+
+        getRoom(id).getTurn();
     }
 }
