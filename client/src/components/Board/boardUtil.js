@@ -75,6 +75,9 @@ const boardUtil = {
                 } break;
                 default: break;
             }
+            [...document.getElementsByClassName('childchild')].forEach(square => {
+                square.classList.remove('vacant', 'occupied');
+            });
         }
     },
 
