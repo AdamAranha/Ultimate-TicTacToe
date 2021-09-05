@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
             setTimeout(() => {
                 const newBoardState = gameLogic.compsTurn(socket.id);
                 const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(socket.id);
-                const boardData = { newBoardState, winArray, overBoardWin, winCondition };
+                const boardData = { newBoardState, winArray, overBoardWin, winCondition, placedBy: 'Program' };
 
                 io.sockets.to(socket.id).emit('gameBoard', boardData);
                 socket.emit('command', {
@@ -67,25 +67,27 @@ io.on('connection', (socket) => {
     socket.on('requestPosition', ({ position, id }, callback) => {
         const { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);;
         const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(id);
-        const boardData = { newBoardState, winArray, overBoardWin, winCondition }
-        io.sockets.to(socket.id).emit('gameBoard', boardData);
+        const boardData = { newBoardState, winArray, overBoardWin, winCondition, placedBy: 'User' }
+        if (wasPlaced) io.sockets.to(socket.id).emit('gameBoard', boardData);
 
         // Then i set a timeout, get the AI position, and send it back
-        if (wasPlaced) {
-            setTimeout(() => {
-                const newBoardState = gameLogic.compsTurn(id);
-                const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(id);
-                const boardData = { newBoardState, winArray, overBoardWin, winCondition };
-                io.sockets.to(socket.id).emit('gameBoard', boardData);
-                socket.emit('command', {
-                    command: 'addEventListeners'
-                });
-            }, 1100);
-        }
+
 
         callback({
             wasPlaced
         })
+    })
+
+    socket.on('AIMove', () => {
+        setTimeout(() => {
+            const newBoardState = gameLogic.compsTurn(socket.id);
+            const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(socket.id);
+            const boardData = { newBoardState, winArray, overBoardWin, winCondition, placedBy: 'Program' };
+            io.sockets.to(socket.id).emit('gameBoard', boardData);
+            socket.emit('command', {
+                command: 'addEventListeners'
+            });
+        }, 1100);
     })
 
     socket.on('test-button', (id) => {
