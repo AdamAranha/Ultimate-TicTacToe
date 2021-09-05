@@ -288,7 +288,7 @@
 
     .vertical{
         z-index: 1;
-        left: 55px;
+        left: 53px;
         top: 15px;
         background-color: #d81010;
         position: absolute;
@@ -313,7 +313,7 @@
         transform-origin:left;
         z-index: 1;
         left:105px;
-        top: 12px;
+        top: 15px;
         position: absolute;
         border-radius: 7.5px;
         animation:growDiagonal 1.5s linear forwards;
