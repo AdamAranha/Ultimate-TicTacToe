@@ -23,9 +23,10 @@ export default function Board({ opponent, socket }) {
         })
 
         socket.on('gameBoard', (boardData) => {
-            const { newBoardState, winArray, winCondition, overBoardWin } = boardData;
+            const { newBoardState, winArray, winCondition, overBoardWin, placedBy } = boardData;
             // if (overBoardWin) console.log(winCondition)
             boardUtil.setBoard(boardData)
+            if (placedBy === 'User' && overBoardWin === false) socket.emit('AIMove')
         })
 
         socket.on('command', (command) => {
