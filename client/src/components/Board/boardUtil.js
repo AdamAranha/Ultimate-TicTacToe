@@ -16,7 +16,6 @@ const boardUtil = {
             id: socket.id
         },
             function onResponse({ wasPlaced }) {
-                console.log(wasPlaced)
                 if (wasPlaced) { boardUtil.removeEventListeners() }
             })
 
