@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('requestPosition', ({ position, id }, callback) => {
-        const { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);;
+        const { newBoardState, wasPlaced } = gameLogic.requestPosition(position, id);
         const { winArray, overBoardWin, winCondition } = gameLogic.checkForSectionWin(id);
         const boardData = { newBoardState, winArray, overBoardWin, winCondition, placedBy: 'User' }
         if (wasPlaced) io.sockets.to(socket.id).emit('gameBoard', boardData);
