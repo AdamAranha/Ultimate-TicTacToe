@@ -22,12 +22,17 @@ class RoomData {
     checkForWin(array) {
         let currentPlayerMarker = this.currentPlayer === this.player1 ? 1 : 2
         let didWin = false;
-        function shortCut(num1, num2, num3) {
+        let winner;
+        function shortCut(num1, num2, num3, players) {
             return (
                 array[num1] === currentPlayerMarker &&
                 array[num2] === currentPlayerMarker &&
                 array[num3] === currentPlayerMarker
             )
+        }
+
+        for (let players; players < 3; players++) {
+            // if (shortCut(0, 1, 2, players)) { didWin = true; this.winCondition = 'h-top' }
         }
 
         if (shortCut(0, 1, 2)) { didWin = true; this.winCondition = 'h-top' }
@@ -40,6 +45,7 @@ class RoomData {
 
         if (shortCut(0, 4, 8)) { didWin = true; this.winCondition = 'd-ltr' }
         if (shortCut(2, 4, 6)) { didWin = true; this.winCondition = 'd-rtl' }
+        if (!array.includes(0)) { didWin = true; this.winCondition = 'tie' }
         // console.log(sectionWon, winCondition) 
         return didWin;
     }
@@ -66,7 +72,7 @@ class RoomData {
     }
 
     checkOveralWin() {
-        if (this.checkForWin(this.winArray)) this.overBoardWin = true;
+        if (this.checkForWin(this.winArray)) { this.overBoardWin = true; }
     }
 
     logPlayers() {
@@ -89,10 +95,11 @@ class RoomData {
             } else { this.gameBoard[xCord][yCord] = 2; }
             this.turn++;
             // this.checkForSectionWin()
-        } else {
-            wasPlaced = false;
-        }
-        return { newBoardState: this.gameBoard, wasPlaced };
+        } else { wasPlaced = false; }
+        return {
+            newBoardState: this.gameBoard,
+            wasPlaced
+        };
     }
 
     getTurn() {
@@ -156,16 +163,115 @@ module.exports = {
     },
 
     compsTurn: function (id) {
-        let freeArray = [];
-        [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
-            if (findRoom(id).excludeArray.includes(sectionIndex)) return;
+        //---------------------RANDOM AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // let freeArray = [];
+        // [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
+        //     if (findRoom(id).excludeArray.includes(sectionIndex)) return;
+        //     section.forEach((square, squareIndex) => {
+        //         if (square === 0) {
+        //             freeArray.push(`${sectionArray[sectionIndex]}-${squareIndex}`)
+        //         }
+        //     })
+        // })
+        // let randomFreeSquare = freeArray[Math.floor(Math.random() * freeArray.length)]
+
+        // return this.requestPosition(randomFreeSquare, id).newBoardState
+        //---------------------RANDOM AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //---------------------MINIMAX AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        let tempBoard = [];
+        let player1;
+        let player2;
+        let theAI;
+        let thePlayer;
+        let counter;
+
+        let bestScore = -Infinity;
+        let bestMove;
+
+        let setDepth = 1
+
+        if (player1 === 'Program') {
+            theAI = 1;
+            thePlayer = 2;
+        } else {
+            thePlayer = 1;
+            theAI = 2;
+        }
+
+
+
+        tempBoard.forEach((section, sectionArray) => {
             section.forEach((square, squareIndex) => {
                 if (square === 0) {
-                    freeArray.push(`${sectionArray[sectionIndex]}-${squareIndex}`)
+                    tempBoard[sectionIndex][squareIndex] = theAI;
+                    let score = minimax(tempBoard, setDepth, false);
+                    tempBoard[sectionIndex][squareIndex] = 0;
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = `${sectionArray[sectionIndex]}-${squareIndex}`
+                    }
+
                 }
             })
         })
-        let randomFreeSquare = freeArray[Math.floor(Math.random() * freeArray.length)]
+
+        return this.requestPosition(bestMove, id).newBoardState
+
+        function minimax(board, depth, isMaximizing) {
+            let returnScore;
+            const { overBoardWin, winner } = checkForSectionWin(board);
+
+            if (depth === 0 || overBoardWin) {
+                counter++;
+                switch (winner) {
+                    case 'tie':
+                        returnScore = 0.5;
+                        break;
+                    case theAI:
+                        returnScore = depth * depth;
+                        break;
+
+                    case thePlayer:
+                        returnScore = depth * depth * -1;
+                        break;
+                }
+                return returnScore;
+            }
+
+            if (isMaximizing) {
+                let maxEval = -Infinity;
+                board.forEach((section, sectionIndex) => {
+                    section.forEach((square, squareIndex) => {
+                        if (square === 0) {
+                            board[sectionIndex][squareIndex] = theAI;
+                            let eval = minimax(board, depth - 1, false);
+                            board[sectionIndex][squareIndex] = 0;
+                            maxEval = Math.max(eval, maxEval)
+                        }
+                    })
+                })
+                return maxEval
+            } else {
+                let minEval = Infinity;
+                board.forEach((section, sectionIndex) => {
+                    section.forEach((square, squareIndex) => {
+                        if (square === 0) {
+                            board[sectionIndex][squareIndex] = thePlayer;
+                            let eval = minimax(board, depth - 1, true);
+                            board[sectionIndex][squareIndex] = 0;
+                            minEval = Math.min(eval, minEval)
+                        }
+                    })
+                })
+                return minEval
+            }
+        }
+
+
+
+        //---------------------MINIMAX AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
         // const { newBoardState, wasPlaced } = this.requestPosition(randomFreeSquare, id)
 
         return this.requestPosition(randomFreeSquare, id).newBoardState
