@@ -19,94 +19,8 @@ class RoomData {
         this.currentPlayer = player1;
     }
 
-    checkForWin(array) {
-        let currentPlayerMarker = this.currentPlayer === this.player1 ? 1 : 2
-        let didWin = false;
-        let winner;
-        function shortCut(num1, num2, num3, players) {
-            return (
-                array[num1] === currentPlayerMarker &&
-                array[num2] === currentPlayerMarker &&
-                array[num3] === currentPlayerMarker
-            )
-        }
-
-        for (let players; players < 3; players++) {
-            // if (shortCut(0, 1, 2, players)) { didWin = true; this.winCondition = 'h-top' }
-        }
-
-        if (shortCut(0, 1, 2)) { didWin = true; this.winCondition = 'h-top' }
-        if (shortCut(3, 4, 5)) { didWin = true; this.winCondition = 'h-mid' }
-        if (shortCut(6, 7, 8)) { didWin = true; this.winCondition = 'h-bot' }
-
-        if (shortCut(0, 3, 6)) { didWin = true; this.winCondition = 'v-left' }
-        if (shortCut(1, 4, 7)) { didWin = true; this.winCondition = 'v-mid' }
-        if (shortCut(2, 5, 8)) { didWin = true; this.winCondition = 'v-right' }
-
-        if (shortCut(0, 4, 8)) { didWin = true; this.winCondition = 'd-ltr' }
-        if (shortCut(2, 4, 6)) { didWin = true; this.winCondition = 'd-rtl' }
-        if (!array.includes(0)) { didWin = true; this.winCondition = 'tie' }
-        // console.log(sectionWon, winCondition) 
-        return didWin;
-    }
-
-    checkForSectionWin() {
-        let currentPlayerMarker = this.currentPlayer === this.player1 ? 1 : 2
-        let sectionWon = false;
-        this.gameBoard.forEach((section, sectionIndex) => {
-
-            if (this.excludeArray.includes(sectionIndex)) return;
-            if (this.checkForWin(section)) {
-                this.winArray[sectionIndex] = currentPlayerMarker;
-                // console.log(`Section[${sectionIndex}] has been won`)
-                this.excludeArray.push(sectionIndex);
-            }
-        })
-        this.checkOveralWin();
-
-        return {
-            winArray: this.winArray,
-            winCondition: this.winCondition,
-            overBoardWin: this.overBoardWin
-        }
-    }
-
-    checkOveralWin() {
-        if (this.checkForWin(this.winArray)) { this.overBoardWin = true; }
-    }
-
     logPlayers() {
         return (`Player 1:${this.player1}\nPlayer 2:${this.player2}`);
-    }
-
-    setPosition(position) {
-        let wasPlaced;
-        const xCord = sectionArray.indexOf(position[0]);
-        const yCord = position[2];
-
-        this.getTurn();
-
-        if (this.gameBoard[xCord][yCord] === 0) {
-
-            wasPlaced = true;
-            if (this.currentPlayer === this.player1) {
-                this.gameBoard[xCord][yCord] = 1;
-
-            } else { this.gameBoard[xCord][yCord] = 2; }
-            this.turn++;
-            // this.checkForSectionWin()
-        } else { wasPlaced = false; }
-        return {
-            newBoardState: this.gameBoard,
-            wasPlaced
-        };
-    }
-
-    getTurn() {
-        this.turn % 2 === 1 ? this.currentPlayer = this.player1 : this.currentPlayer = this.player2;
-        console.log(`We are on turn ${this.turn + 1}, it is currently ${this.currentPlayer === this.player1 ? this.player2 : this.player1}'s turn`);
-
-        return this.currentPlayer
     }
 
     resetBoard() {
@@ -119,6 +33,100 @@ class RoomData {
 
 function findRoom(roomName) {
     return roomList.find(({ room }) => room === roomName);
+}
+///////////////////////////////FUNCTIONS/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function getTurn(room) {
+    room.turn % 2 === 1 ? room.currentPlayer = room.player1 : room.currentPlayer = room.player2;
+    console.log(`We are on turn ${room.turn + 1}, it is currently ${room.currentPlayer === room.player1 ? room.player2 : room.player1}'s turn`);
+
+    return room.currentPlayer
+}
+
+function setPosition(room, position) {
+    let wasPlaced;
+    const xCord = sectionArray.indexOf(position[0]);
+    const yCord = position[2];
+
+    getTurn(room);
+
+    if (room.gameBoard[xCord][yCord] === 0) {
+
+        wasPlaced = true;
+        if (room.currentPlayer === room.player1) {
+            room.gameBoard[xCord][yCord] = 1;
+
+        } else {
+            room.gameBoard[xCord][yCord] = 2;
+        }
+        room.turn++;
+        // this.checkForSectionWin()
+    } else { wasPlaced = false; }
+
+    return {
+        newBoardState: room.gameBoard,
+        wasPlaced
+    };
+}
+
+function checkForSectionWin(room) {
+
+    let currentPlayerMarker = room.currentPlayer === room.player1 ? 1 : 2
+    let sectionWon = false;
+    room.gameBoard.forEach((section, sectionIndex) => {
+
+        if (room.excludeArray.includes(sectionIndex)) return;
+        if (checkForWin(section)) {
+            room.winArray[sectionIndex] = currentPlayerMarker;
+            // console.log(`Section[${sectionIndex}] has been won`)
+            room.excludeArray.push(sectionIndex);
+        }
+    })
+    checkOveralWin();
+
+    return {
+        winArray: room.winArray,
+        winCondition: room.winCondition,
+        overBoardWin: room.overBoardWin
+    }
+
+    function checkForWin(array) {
+        let currentPlayerMarker = room.currentPlayer === room.player1 ? 1 : 2
+        let didWin = false;
+        let winner;
+        function shortCut(num1, num2, num3, players) {
+            return (
+                array[num1] === array[num2] &&
+                array[num2] === array[num3] &&
+                array[num3] === players
+            )
+        }
+
+        for (let players = 1; players < 3; players++) {
+            if (shortCut(0, 1, 2, players)) { didWin = true; this.winCondition = 'h-top' }
+            if (shortCut(3, 4, 5, players)) { didWin = true; room.winCondition = 'h-mid' }
+            if (shortCut(6, 7, 8, players)) { didWin = true; room.winCondition = 'h-bot' }
+
+            if (shortCut(0, 3, 6, players)) { didWin = true; room.winCondition = 'v-left' }
+            if (shortCut(1, 4, 7, players)) { didWin = true; room.winCondition = 'v-mid' }
+            if (shortCut(2, 5, 8, players)) { didWin = true; room.winCondition = 'v-right' }
+
+            if (shortCut(0, 4, 8, players)) { didWin = true; room.winCondition = 'd-ltr' }
+            if (shortCut(2, 4, 6, players)) { didWin = true; room.winCondition = 'd-rtl' }
+            if (!array.includes(0)) { didWin = true; room.winCondition = 'tie' }
+
+        }
+        return didWin;
+    }
+
+    function checkOveralWin() {
+        if (checkForWin(room.winArray)) {
+            room.overBoardWin = true;
+
+
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,68 +167,78 @@ module.exports = {
     },
 
     checkForSectionWin: function (id) {
-        return findRoom(id).checkForSectionWin();
+        // const currentRoom, { gameBoard } = findRoom(id);
+        // const thisGameBoard = checkForSectionWin(currentRoom);
+
+        return checkForSectionWin(findRoom(id));
     },
 
     compsTurn: function (id) {
-        //---------------------RANDOM AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        // let freeArray = [];
-        // [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
-        //     if (findRoom(id).excludeArray.includes(sectionIndex)) return;
-        //     section.forEach((square, squareIndex) => {
-        //         if (square === 0) {
-        //             freeArray.push(`${sectionArray[sectionIndex]}-${squareIndex}`)
-        //         }
-        //     })
-        // })
-        // let randomFreeSquare = freeArray[Math.floor(Math.random() * freeArray.length)]
+        // ---------------------RANDOM AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        let freeArray = [];
+        [...findRoom(id).gameBoard].forEach((section, sectionIndex) => {
+            if (findRoom(id).excludeArray.includes(sectionIndex)) return;
+            section.forEach((square, squareIndex) => {
+                if (square === 0) {
+                    freeArray.push(`${sectionArray[sectionIndex]}-${squareIndex}`)
+                }
+            })
+        })
+        let randomFreeSquare = freeArray[Math.floor(Math.random() * freeArray.length)]
 
-        // return this.requestPosition(randomFreeSquare, id).newBoardState
+        return this.requestPosition(randomFreeSquare, id).newBoardState
         //---------------------RANDOM AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //---------------------MINIMAX AI---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        const {
+            gameBoard,
+            player1,
+            player2,
+            winArray,
+            overBoardWin,
+            winner
+        } = findRoom(id);
 
-        let tempBoard = [];
-        let player1;
-        let player2;
         let theAI;
         let thePlayer;
         let counter;
-
-        let bestScore = -Infinity;
-        let bestMove;
-
-        let setDepth = 1
-
         if (player1 === 'Program') {
             theAI = 1;
             thePlayer = 2;
         } else {
-            thePlayer = 1;
             theAI = 2;
+            thePlayer = 1;
         }
 
 
+        let bestScore = -Infinity;
+        let bestMove;
 
-        tempBoard.forEach((section, sectionArray) => {
+        let setDepth = 5;
+
+
+
+
+        gameBoard.forEach((section, sectionArray) => {
             section.forEach((square, squareIndex) => {
                 if (square === 0) {
-                    tempBoard[sectionIndex][squareIndex] = theAI;
-                    let score = minimax(tempBoard, setDepth, false);
-                    tempBoard[sectionIndex][squareIndex] = 0;
+                    gameBoard[sectionIndex][squareIndex] = theAI;
+                    let score = minimax(gameBoard, setDepth, false);
+                    gameBoard[sectionIndex][squareIndex] = 0;
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = `${sectionArray[sectionIndex]}-${squareIndex}`
                     }
-
                 }
             })
         })
+        console.log(`Calculated ${counter} possiblities, the best move is ${bestMove}`);
 
         return this.requestPosition(bestMove, id).newBoardState
 
         function minimax(board, depth, isMaximizing) {
             let returnScore;
-            const { overBoardWin, winner } = checkForSectionWin(board);
+            // const { overBoardWin, winner } = findRoom(id);
+            // winner === program
 
             if (depth === 0 || overBoardWin) {
                 counter++;
@@ -278,7 +296,7 @@ module.exports = {
     },
 
     requestPosition: function (position, id) {
-        const { newBoardState, wasPlaced } = findRoom(id).setPosition(position);
+        const { newBoardState, wasPlaced } = setPosition(findRoom(id), position);
 
         return { newBoardState, wasPlaced };
     },
