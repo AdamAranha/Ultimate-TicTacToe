@@ -5,9 +5,6 @@ import boardUtil from './boardUtil.js'// All the Logic is here
 export default function Board({ opponent, socket }) {
     // placementArray keeps track of x's and o's on the board
     let socketId = '';
-    let isPlayer = true
-    let excludeArray = [];
-    let gameBoard = [];
     const sectionArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
     let numberArray = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight']
     const realNumberArray = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -26,8 +23,6 @@ export default function Board({ opponent, socket }) {
             const { newBoardState, winArray, winCondition, overBoardWin, placedBy } = boardData;
             // if (overBoardWin) console.log(winCondition)
             boardUtil.setBoard(boardData)
-            console.log(placedBy)
-            console.log(overBoardWin)
             if (placedBy === 'User' && overBoardWin === false) socket.emit('AIMove');
         })
 
