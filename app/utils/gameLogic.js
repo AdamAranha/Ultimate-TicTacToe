@@ -14,8 +14,8 @@ class RoomData {
         this.excludeArray = [];
         this.player1 = player1;
         this.player2 = player2;
-        this.overBoardWin = false;
-        this.winCondition = 'none';
+        // this.overBoardWin = false;
+        // this.winCondition = 'none';
         this.currentPlayer = player1;
     }
 
@@ -70,63 +70,66 @@ function setPosition(room, position) {
     };
 }
 
+function checkForWin(array) {
+    // let currentPlayerMarker = room.currentPlayer === room.player1 ? 1 : 2
+    let didWin = false;
+    let winCondition = 'none';
+    function shortCut(num1, num2, num3, players) {
+        return (
+            array[num1] === array[num2] &&
+            array[num2] === array[num3] &&
+            array[num3] === players
+        )
+    }
+    for (let players = 1; players < 3; players++) {
+        if (shortCut(0, 1, 2, players)) { didWin = true; winCondition = 'h-top' }
+        if (shortCut(3, 4, 5, players)) { didWin = true; winCondition = 'h-mid' }
+        if (shortCut(6, 7, 8, players)) { didWin = true; room.winCondition = 'h-bot' }
+
+        if (shortCut(0, 3, 6, players)) { didWin = true; winCondition = 'v-left' }
+        if (shortCut(1, 4, 7, players)) { didWin = true; winCondition = 'v-mid' }
+        if (shortCut(2, 5, 8, players)) { didWin = true; room.winCondition = 'v-right' }
+
+        if (shortCut(0, 4, 8, players)) { didWin = true; winCondition = 'd-ltr' }
+        if (shortCut(2, 4, 6, players)) { didWin = true; winCondition = 'd-rtl' }
+        if (!array.includes(0)) { didWin = true; winCondition = 'tie' }
+    }
+    return {
+        state: didWin,
+        winCondition
+    };
+}
+
 function checkForSectionWin(room) {
+    let overBoardWin = false;
 
     let currentPlayerMarker = room.currentPlayer === room.player1 ? 1 : 2
     let sectionWon = false;
+    let thisWinCondition;
     room.gameBoard.forEach((section, sectionIndex) => {
 
         if (room.excludeArray.includes(sectionIndex)) return;
-        if (checkForWin(section)) {
+        if (checkForWin(section).state) {
             room.winArray[sectionIndex] = currentPlayerMarker;
-            // console.log(`Section[${sectionIndex}] has been won`)
             room.excludeArray.push(sectionIndex);
         }
     })
-    checkOveralWin();
+    const { state, winCondition } = checkOveralWin(room.winArray);
+    if (state) {
+        overBoardWin = true,
+            thisWinCondition = winCondition
+    }
 
     return {
         winArray: room.winArray,
-        winCondition: room.winCondition,
-        overBoardWin: room.overBoardWin
+        winCondition: thisWinCondition,
+        overBoardWin
     }
+}
 
-    function checkForWin(array) {
-        let currentPlayerMarker = room.currentPlayer === room.player1 ? 1 : 2
-        let didWin = false;
-        let winner;
-        function shortCut(num1, num2, num3, players) {
-            return (
-                array[num1] === array[num2] &&
-                array[num2] === array[num3] &&
-                array[num3] === players
-            )
-        }
-
-        for (let players = 1; players < 3; players++) {
-            if (shortCut(0, 1, 2, players)) { didWin = true; this.winCondition = 'h-top' }
-            if (shortCut(3, 4, 5, players)) { didWin = true; room.winCondition = 'h-mid' }
-            if (shortCut(6, 7, 8, players)) { didWin = true; room.winCondition = 'h-bot' }
-
-            if (shortCut(0, 3, 6, players)) { didWin = true; room.winCondition = 'v-left' }
-            if (shortCut(1, 4, 7, players)) { didWin = true; room.winCondition = 'v-mid' }
-            if (shortCut(2, 5, 8, players)) { didWin = true; room.winCondition = 'v-right' }
-
-            if (shortCut(0, 4, 8, players)) { didWin = true; room.winCondition = 'd-ltr' }
-            if (shortCut(2, 4, 6, players)) { didWin = true; room.winCondition = 'd-rtl' }
-            if (!array.includes(0)) { didWin = true; room.winCondition = 'tie' }
-
-        }
-        return didWin;
-    }
-
-    function checkOveralWin() {
-        if (checkForWin(room.winArray)) {
-            room.overBoardWin = true;
-
-
-        }
-    }
+function checkOveralWin(array) {
+    const { state, winCondition } = checkForWin(array)
+    return { state, winCondition };
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
