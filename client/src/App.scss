@@ -1,0 +1,9 @@
+@use './components/Board/board';
+
+*,*::after,*::before {
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+}

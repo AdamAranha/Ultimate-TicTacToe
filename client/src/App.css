@@ -1,18 +1,55 @@
-*,*::before,*::after {
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 1vh;
+}
+.board .sectionA, .board .sectionB, .board .sectionD, .board .sectionE, .board .sectionG, .board .sectionH {
+  border-right: 3px solid black;
+}
+.board .sectionA, .board .sectionB, .board .sectionC, .board .sectionD, .board .sectionE, .board .sectionF {
+  border-bottom: 3px solid black;
+}
+.board .section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 1vh;
+}
+.board .section .square0, .board .section .square1, .board .section .square3, .board .section .square4, .board .section .square6, .board .section .square7 {
+  border-right: 1px solid black;
+}
+.board .section .square0, .board .section .square1, .board .section .square2, .board .section .square3, .board .section .square4, .board .section .square5 {
+  border-bottom: 1px solid black;
+}
+.board .section .square {
+  height: 5.25vh;
+  width: 5.25vh;
+}
+.board .section .square::after {
+  align-items: center;
+  content: attr(data-marker);
+  display: flex;
+  font-size: 5vh;
+  height: 100%;
+  justify-content: center;
+  max-height: 100%;
+  max-width: 100%;
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .board {
+    height: 45vw;
+    width: 45vw;
+  }
+  .board .section .square {
+    height: 9vh;
+    width: 9vh;
+  }
+}
+*, *::after, *::before {
   box-sizing: border-box;
 }
 
-.body-wrapper{
-  display: block;
-  display: flex;
-  justify-content: center;
-}
-
-.board-wrapper{
-  height: 70vh;
-  width: 70vh;
-}
-
-.app-modal{
-  display: none;
-}
+h1 {
+  text-align: center;
+}/*# sourceMappingURL=App.css.map */
